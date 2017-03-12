@@ -8,21 +8,21 @@ import org.json.JSONObject;
  * Created by andrey on 11.03.17.
  */
 public class ObjThread {
-    private Integer id;
+    private int id;
     private String title;
     private String author;
     private String forum;
     private  String message;
     private String slug;
     private int votes;
-    private String created;
+    private String  created;
     public ObjThread() {
 
     }
 
     @JsonCreator
     public ObjThread(
-            @JsonProperty("id") Integer id,
+            @JsonProperty("id") int id,
             @JsonProperty("title") String title,
             @JsonProperty("author") String author,
             @JsonProperty("slug") String slug,
@@ -40,7 +40,7 @@ public class ObjThread {
         this.created=created;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -95,14 +95,15 @@ public class ObjThread {
 
     public JSONObject getJson() {
         final JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", id);
-        jsonObject.put("title",title);
         jsonObject.put("author", author);
+        jsonObject.put("created", created);
         jsonObject.put("forum",forum);
+        jsonObject.put("id", id);
         jsonObject.put("message",message);
         jsonObject.put("slug", slug);
-        jsonObject.put("votes",votes);
-        jsonObject.put("created", created);
+        jsonObject.put("title",title);
+        if(votes!=0)jsonObject.put("votes",votes);
+
         return jsonObject;
     }
 }

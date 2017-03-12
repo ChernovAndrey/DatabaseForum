@@ -12,36 +12,34 @@ import master.rowmaps.threadMapper;
 import master.rowmaps.userMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.postgresql.core.Oid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import master.objects.ObjUser;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,28 +158,88 @@ public class UserController {
     //thread
     @RequestMapping(path = "/forum/{slug}/create", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> createThread(@RequestBody ObjThread body, @PathVariable String slug) {
-
-        String SQLThread = "select * from thread where lower(slug)= ?";
+        String SQLThread = "select * from thread where lower(title)= ?";
         try {
             ObjThread thread = jdbcTemplate.queryForObject(SQLThread,
-                    new Object[]{slug.toLowerCase()}, new threadMapper());
+                    new Object[]{body.getTitle().toLowerCase()}, new threadMapper());
             return new ResponseEntity<String>(thread.getJson().toString(), HttpStatus.CONFLICT);
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
         String SQLForum = "select * from forum where lower(slug)=?";
 
         String SQLUser = "select * from users where lower(nickname)=?";
+
         try {
             ObjUser user = jdbcTemplate.queryForObject(SQLUser,
                     new Object[]{body.getAuthor().toLowerCase()}, new userMapper());
             ObjForum thread = jdbcTemplate.queryForObject(SQLForum,
                     new Object[]{body.getForum().toLowerCase()}, new forumMapper());
-            System.out.println(body.getId());
-            return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
+
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
         }
-    }
+        final KeyHolder holder = new GeneratedKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement("insert into thread (title,author,forum,message,slug," +
+                        "votes,created) values (?,?,?,?,?,?,?::timestamptz)",new String[] {"id"});
+                ps.setString(1, body.getTitle());
+                ps.setString(2, body.getAuthor());
+                ps.setString(3, body.getForum());
+                ps.setString(4, body.getMessage());
+                ps.setString(5, body.getSlug());
+                ps.setInt(6, body.getVotes());
+                ps.setString(7, body.getCreated());
+                return ps;
+            }
+        },holder);
+        body.setId((int)holder.getKey());
+        return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
+     }
 
+
+
+    @RequestMapping(path = "/forum/{slug}/threads", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> getThreads(@PathVariable String slug,@RequestParam(value = "limit",required = false) Integer limit,
+                                             @RequestParam(value = "since",required = false) String since,@RequestParam(value = "desc", required = false) Boolean desc) {
+        ResponseEntity<String> forum = getForum(slug);
+        if (forum.getStatusCodeValue()==404) return forum;
+        StringBuilder SQLThreads=new StringBuilder("select * from thread where forum=?");
+        if (since != null)  {
+            StringBuilder time = new StringBuilder(since);
+            time.replace(10,11," ");
+            since=time.toString();
+            SQLThreads.append(" and created >=?::timestamptz ");
+        }
+        SQLThreads.append(" order by created ");
+        if(desc.booleanValue()==true) SQLThreads.append(" desc ");
+        List<ObjThread> threads;
+        if(limit!=null) {
+            SQLThreads.append(" limit ?");
+            if (since!=null) {
+
+                System.out.println(since);
+                threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug,since, limit}, new threadMapper());
+            }
+            else threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug,limit}, new threadMapper());
+        }
+        else{
+
+            if(since!=null) {
+                threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug,since}, new threadMapper());
+            }
+            else threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug},new threadMapper());
+        }
+        JSONArray result = new JSONArray();
+        for (int i = 0; i < threads.size(); i++) {
+            StringBuilder time= new StringBuilder(threads.get(i).getCreated());
+            time.replace(10,11,"T");
+            time.append(":00");
+            threads.get(i).setCreated(time.toString());
+            result.put(threads.get(i).getJson());
+        }
+        return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
+    }
 }
