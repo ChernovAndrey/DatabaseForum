@@ -6,7 +6,9 @@ package master;
 
 import jdk.nashorn.internal.parser.JSONParser;
 import master.objects.ObjForum;
+import master.objects.ObjThread;
 import master.rowmaps.forumMapper;
+import master.rowmaps.threadMapper;
 import master.rowmaps.userMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -67,6 +69,7 @@ public class UserController {
         try {
             ObjUser user = jdbcTemplate.queryForObject(SQLUsers,
                     new Object[]{body.getUser().toLowerCase()}, new userMapper());
+            body.setUser(user.getNickname());
         }
         catch(Exception e2){
             return new ResponseEntity<String>("",HttpStatus.NOT_FOUND);
@@ -74,10 +77,25 @@ public class UserController {
         String SQLForum="select * from forum where title = ? or slug= ? or \"user\" =? ";
             List<ObjForum> forum = jdbcTemplate.query(SQLForum,
                     new Object[]{body.getTitle(),body.getSlug(),body.getUser()}, new forumMapper());
-            if (!forum.isEmpty()) return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CONFLICT);
+            if (!forum.isEmpty()) return new ResponseEntity<String>(forum.get(0).getJson().toString(), HttpStatus.CONFLICT);
             jdbcTemplate.update(
                     "INSERT INTO forum (title,\"user\",slug,posts,threads) values(?,?,?,?,?)", body.getTitle(), body.getUser(), body.getSlug(), body.getPosts(), body.getThreads());
             return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
+    }
+
+
+    @RequestMapping(path = "/forum/{slug}/details", method = RequestMethod.GET,produces = "application/json")
+    public ResponseEntity<String> getForum(@PathVariable String slug) {
+        String SQLForum="select * from forum where lower(slug) = ?";
+        try {
+            ObjForum forum = jdbcTemplate.queryForObject(SQLForum,
+                    new Object[]{slug.toLowerCase()}, new forumMapper());
+            return new ResponseEntity<String>(forum.getJson().toString(), HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+        }
+
     }
 
 
@@ -99,9 +117,9 @@ public class UserController {
 
     @RequestMapping(path = "/user/{nickname}/profile", method = RequestMethod.GET,produces = "application/json")
     public ResponseEntity<String> getUser(@PathVariable String nickname) {
-        String SQLForum="select * from users where lower(nickname) = ?";
+        String SQLUser="select * from users where lower(nickname) = ?";
         try {
-            ObjUser user = jdbcTemplate.queryForObject(SQLForum,
+            ObjUser user = jdbcTemplate.queryForObject(SQLUser,
                     new Object[]{nickname.toLowerCase()}, new userMapper());
             return new ResponseEntity<String>(user.getJson().toString(), HttpStatus.OK);
         }
@@ -113,24 +131,13 @@ public class UserController {
 
     @RequestMapping(path = "/user/{nickname}/profile", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> updateUser(@RequestBody ObjUser body, @PathVariable String nickname) {
-        //  final JSONObject answer = new JSONObject();
-        System.out.println(body.getJson().toString());
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         if(body.getJson().toString().equals("{}")) return getUser(nickname);
         ResponseEntity<String> resultGet = getUser(nickname);
         if(resultGet.getStatusCodeValue()==404) return resultGet;
         //String oldUSer=resultGet.getBody();
         //JSONParser parser =new JSONParser();
         JSONObject oldUser= new JSONObject(resultGet.getBody());
-        System.out.println(oldUser.toString());
         JSONObject newUser= body.getJson();
-        /*System.out.println(old.has("about"));
-        System.out.println(old.has("email"));
-        System.out.println(old.has("fullname"));*/
-
-        /*System.out.println(u.has("about"));
-        System.out.println(u.has("email"));
-        System.out.println(u.has("fullname"));*/
         if(newUser.has("email")) {
             List<ObjUser> users = jdbcTemplate.query("select * from users where LOWER (email)=? ", new Object[]{body.getEmail().toLowerCase()}, new userMapper());
             if (!users.isEmpty()) {
@@ -138,108 +145,43 @@ public class UserController {
             }
         }
 
-        System.out.println(oldUser.has("about"));
-        System.out.println(oldUser.has("email"));
-        System.out.println(oldUser.has("fullname"));
 
         if(!newUser.has("about")) body.setAbout(oldUser.get("about").toString());
         if(!newUser.has("email")) body.setEmail(oldUser.get("email").toString());
         if(!newUser.has("fullname")) body.setFullname(oldUser.get("fullname").toString());
 
-        System.out.println(body.getAbout());
-        System.out.println(body.getEmail());
-        System.out.println(body.getFullname());
-
         body.setNickname(nickname);
         jdbcTemplate.update("update users set (fullname,about,email)=(?,?,?) where lower(nickname)= ?",body.getFullname(),body.getAbout(),body.getEmail(),nickname.toLowerCase());
         return new ResponseEntity<String>(body.getJson().toString(),HttpStatus.OK);
     }
-/*
-    @RequestMapping(path = "/signup", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public String registerUser(@RequestBody ObjUser body) {
-        final JSONObject answer = new JSONObject();
-        accountService.register(body, new AccountService.Callback() {
-            @Override
-            public void onSuccess(String status) {
-                answer.put("status", status);
-            }
 
-            @Override
-            public void onError(String status) {
-                answer.put("status", status);
-            }
-        });
-        return answer.toString();
+
+
+    //thread
+    @RequestMapping(path = "/forum/{slug}/create", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    public ResponseEntity<String> createThread(@RequestBody ObjThread body, @PathVariable String slug) {
+
+        String SQLThread = "select * from thread where lower(slug)= ?";
+        try {
+            ObjThread thread = jdbcTemplate.queryForObject(SQLThread,
+                    new Object[]{slug.toLowerCase()}, new threadMapper());
+            return new ResponseEntity<String>(thread.getJson().toString(), HttpStatus.CONFLICT);
+        } catch (Exception e) {
+        }
+        String SQLForum = "select * from forum where lower(slug)=?";
+
+        String SQLUser = "select * from users where lower(nickname)=?";
+        try {
+            ObjUser user = jdbcTemplate.queryForObject(SQLUser,
+                    new Object[]{body.getAuthor().toLowerCase()}, new userMapper());
+            ObjForum thread = jdbcTemplate.queryForObject(SQLForum,
+                    new Object[]{body.getForum().toLowerCase()}, new forumMapper());
+            System.out.println(body.getId());
+            return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+        }
     }
 
-    @RequestMapping(path = "/get", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public String getUser(HttpSession httpSession) {
-        final JSONObject answer = new JSONObject();
-        final ObjUser objUser = (ObjUser) httpSession.getAttribute(SESSIONKEY);
-        if (objUser != null) {
-            answer.put("status", new HttpStatus().getOk());
-            answer.put("user", objUser.getJson());
-        } else {
-            answer.put("status", new HttpStatus().getUnauthorized());
-        }
-        return answer.toString();
-    }
-
-    @RequestMapping(path = "/update", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public String updateUser(@RequestBody ObjUser body, HttpSession httpSession) {
-        final JSONObject answer = new JSONObject();
-        if (httpSession.getAttribute(SESSIONKEY) != null) {
-            accountService.update(body, new AccountService.CallbackWithUser() {
-                @Override
-                public void onSuccess(String status, ObjUser objUser) {
-                    httpSession.removeAttribute(SESSIONKEY);
-                    httpSession.setAttribute(SESSIONKEY, objUser);
-                    answer.put("status", status);
-                }
-
-                @Override
-                public void onError(String status) {
-                    answer.put("status", status);
-                }
-            });
-        } else {
-            answer.put("status", new HttpStatus().getUnauthorized());
-        }
-        return answer.toString();
-    }
-
-    @RequestMapping(path = "/changepass", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public String changeUserPass(@RequestBody ObjUser body, HttpSession httpSession) {
-        final JSONObject answer = new JSONObject();
-        if (httpSession.getAttribute(SESSIONKEY) != null) {
-            accountService.changePass(body, new AccountService.CallbackWithUser() {
-                @Override
-                public void onSuccess(String status, ObjUser objUser) {
-                    httpSession.removeAttribute(SESSIONKEY);
-                    httpSession.setAttribute(SESSIONKEY, objUser);
-                    answer.put("status", status);
-                }
-
-                @Override
-                public void onError(String status) {
-                    answer.put("status", status);
-                }
-            });
-        } else {
-            answer.put("status", new HttpStatus().getUnauthorized());
-        }
-        return answer.toString();
-    }
-
-    @RequestMapping(path = "/logout", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public String logoutUser(HttpSession httpSession) {
-        final JSONObject answer = new JSONObject();
-        if (httpSession.getAttribute(SESSIONKEY) != null) {
-            httpSession.removeAttribute(SESSIONKEY);
-            answer.put("status", new HttpStatus().getOk());
-        } else {
-            answer.put("status", new HttpStatus().getBadRequest());
-        }
-        return answer.toString();
-    }*/
 }
