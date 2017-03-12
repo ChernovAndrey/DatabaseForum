@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb275f87-388d-423a-9850-15a49aaf8f57" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/master/UserController.class" afterPath="$PROJECT_DIR$/target/classes/master/UserController.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/master/UserController.java" afterPath="$PROJECT_DIR$/src/main/java/master/UserController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/application.properties" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/application.properties" afterPath="$PROJECT_DIR$/target/classes/application.properties" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -755,7 +751,7 @@
       <workItem from="1489130825708" duration="6781000" />
       <workItem from="1489157689181" duration="11215000" />
       <workItem from="1489317291090" duration="435000" />
-      <workItem from="1489317829526" duration="45000" />
+      <workItem from="1489317829526" duration="183000" />
     </task>
     <task id="LOCAL-00001" summary=" second commit">
       <created>1489317545955</created>
@@ -764,11 +760,18 @@
       <option name="project" value="LOCAL" />
       <updated>1489317545955</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary=" second commit">
+      <created>1489317899260</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1489317899260</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="70111000" />
+    <option name="totallyTimeSpent" value="70249000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
