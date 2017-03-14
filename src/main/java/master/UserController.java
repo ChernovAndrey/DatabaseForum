@@ -6,6 +6,7 @@ package master;
 
 import jdk.nashorn.internal.parser.JSONParser;
 import master.objects.ObjForum;
+import master.objects.ObjPost;
 import master.objects.ObjThread;
 import master.rowmaps.forumMapper;
 import master.rowmaps.threadMapper;
@@ -42,6 +43,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+
+import java.text.DateFormat;
+
+import java.text.SimpleDateFormat;
 
 @RestController
 @RequestMapping("/api")
@@ -49,48 +55,46 @@ public class UserController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @RequestMapping(path = "/user", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
-    public String loginUser(@RequestBody ObjUser body) {
-        final JSONObject answer = new JSONObject();
-        final StringBuilder sql = new StringBuilder("SELECT id, description, completed FROM tasks");
-        final List<Object> args = new ArrayList<>();
-        jdbcTemplate.update(
-                "INSERT INTO Users (nickname,fullname) values(?,?)", "nick", "full");
-        return "OK";
+    private String getDateTime() {
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss+03:00");
+
+        Date date = new Date();
+
+        return dateFormat.format(date);
+
     }
 
     @RequestMapping(path = "/forum/create", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> createForum(@RequestBody ObjForum body) {
-      //  final JSONObject answer = new JSONObject();
+        //  final JSONObject answer = new JSONObject();
 
         String SQLUsers = "select * from users where lower(nickname) = ?";
         try {
             ObjUser user = jdbcTemplate.queryForObject(SQLUsers,
                     new Object[]{body.getUser().toLowerCase()}, new userMapper());
             body.setUser(user.getNickname());
+        } catch (Exception e2) {
+            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
         }
-        catch(Exception e2){
-            return new ResponseEntity<String>("",HttpStatus.NOT_FOUND);
-        }
-        String SQLForum="select * from forum where title = ? or slug= ? or \"user\" =? ";
-            List<ObjForum> forum = jdbcTemplate.query(SQLForum,
-                    new Object[]{body.getTitle(),body.getSlug(),body.getUser()}, new forumMapper());
-            if (!forum.isEmpty()) return new ResponseEntity<String>(forum.get(0).getJson().toString(), HttpStatus.CONFLICT);
-            jdbcTemplate.update(
-                    "INSERT INTO forum (title,\"user\",slug,posts,threads) values(?,?,?,?,?)", body.getTitle(), body.getUser(), body.getSlug(), body.getPosts(), body.getThreads());
-            return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
+        String SQLForum = "select * from forum where title = ? or slug= ? or \"user\" =? ";
+        List<ObjForum> forum = jdbcTemplate.query(SQLForum,
+                new Object[]{body.getTitle(), body.getSlug(), body.getUser()}, new forumMapper());
+        if (!forum.isEmpty()) return new ResponseEntity<String>(forum.get(0).getJson().toString(), HttpStatus.CONFLICT);
+        jdbcTemplate.update(
+                "INSERT INTO forum (title,\"user\",slug,posts,threads) values(?,?,?,?,?)", body.getTitle(), body.getUser(), body.getSlug(), body.getPosts(), body.getThreads());
+        return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
     }
 
 
-    @RequestMapping(path = "/forum/{slug}/details", method = RequestMethod.GET,produces = "application/json")
+    @RequestMapping(path = "/forum/{slug}/details", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> getForum(@PathVariable String slug) {
-        String SQLForum="select * from forum where lower(slug) = ?";
+        String SQLForum = "select * from forum where lower(slug) = ?";
         try {
             ObjForum forum = jdbcTemplate.queryForObject(SQLForum,
                     new Object[]{slug.toLowerCase()}, new forumMapper());
             return new ResponseEntity<String>(forum.getJson().toString(), HttpStatus.OK);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
         }
 
@@ -100,28 +104,27 @@ public class UserController {
     @RequestMapping(path = "/user/{nickname}/create", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> createUser(@RequestBody ObjUser body, @PathVariable String nickname) {
         //  final JSONObject answer = new JSONObject();
-            body.setNickname(nickname);
-            List<ObjUser> users = jdbcTemplate.query("select * from users where LOWER (email)=? or LOWER (nickname)=?", new Object[]{body.getEmail().toLowerCase(), body.getNickname().toLowerCase()}, new userMapper());
-            if(users.isEmpty()) {
-                jdbcTemplate.update("insert into users (nickname,fullname,about,email) values (?,?,?,?)",body.getNickname(),body.getFullname(),body.getAbout(),body.getEmail());
-                return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
-            }
+        body.setNickname(nickname);
+        List<ObjUser> users = jdbcTemplate.query("select * from users where LOWER (email)=? or LOWER (nickname)=?", new Object[]{body.getEmail().toLowerCase(), body.getNickname().toLowerCase()}, new userMapper());
+        if (users.isEmpty()) {
+            jdbcTemplate.update("insert into users (nickname,fullname,about,email) values (?,?,?,?)", body.getNickname(), body.getFullname(), body.getAbout(), body.getEmail());
+            return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
+        }
         JSONArray result = new JSONArray();
         for (int i = 0; i < users.size(); i++) {
             result.put(users.get(i).getJson());
         }
-            return new ResponseEntity<String>(result.toString(), HttpStatus.CONFLICT);
+        return new ResponseEntity<String>(result.toString(), HttpStatus.CONFLICT);
     }
 
-    @RequestMapping(path = "/user/{nickname}/profile", method = RequestMethod.GET,produces = "application/json")
+    @RequestMapping(path = "/user/{nickname}/profile", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> getUser(@PathVariable String nickname) {
-        String SQLUser="select * from users where lower(nickname) = ?";
+        String SQLUser = "select * from users where lower(nickname) = ?";
         try {
             ObjUser user = jdbcTemplate.queryForObject(SQLUser,
                     new Object[]{nickname.toLowerCase()}, new userMapper());
             return new ResponseEntity<String>(user.getJson().toString(), HttpStatus.OK);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
         }
 
@@ -129,14 +132,14 @@ public class UserController {
 
     @RequestMapping(path = "/user/{nickname}/profile", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> updateUser(@RequestBody ObjUser body, @PathVariable String nickname) {
-        if(body.getJson().toString().equals("{}")) return getUser(nickname);
+        if (body.getJson().toString().equals("{}")) return getUser(nickname);
         ResponseEntity<String> resultGet = getUser(nickname);
-        if(resultGet.getStatusCodeValue()==404) return resultGet;
+        if (resultGet.getStatusCodeValue() == 404) return resultGet;
         //String oldUSer=resultGet.getBody();
         //JSONParser parser =new JSONParser();
-        JSONObject oldUser= new JSONObject(resultGet.getBody());
-        JSONObject newUser= body.getJson();
-        if(newUser.has("email")) {
+        JSONObject oldUser = new JSONObject(resultGet.getBody());
+        JSONObject newUser = body.getJson();
+        if (newUser.has("email")) {
             List<ObjUser> users = jdbcTemplate.query("select * from users where LOWER (email)=? ", new Object[]{body.getEmail().toLowerCase()}, new userMapper());
             if (!users.isEmpty()) {
                 return new ResponseEntity<String>("", HttpStatus.CONFLICT);
@@ -144,15 +147,14 @@ public class UserController {
         }
 
 
-        if(!newUser.has("about")) body.setAbout(oldUser.get("about").toString());
-        if(!newUser.has("email")) body.setEmail(oldUser.get("email").toString());
-        if(!newUser.has("fullname")) body.setFullname(oldUser.get("fullname").toString());
+        if (!newUser.has("about")) body.setAbout(oldUser.get("about").toString());
+        if (!newUser.has("email")) body.setEmail(oldUser.get("email").toString());
+        if (!newUser.has("fullname")) body.setFullname(oldUser.get("fullname").toString());
 
         body.setNickname(nickname);
-        jdbcTemplate.update("update users set (fullname,about,email)=(?,?,?) where lower(nickname)= ?",body.getFullname(),body.getAbout(),body.getEmail(),nickname.toLowerCase());
-        return new ResponseEntity<String>(body.getJson().toString(),HttpStatus.OK);
+        jdbcTemplate.update("update users set (fullname,about,email)=(?,?,?) where lower(nickname)= ?", body.getFullname(), body.getAbout(), body.getEmail(), nickname.toLowerCase());
+        return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.OK);
     }
-
 
 
     //thread
@@ -163,7 +165,8 @@ public class UserController {
             ObjThread thread = jdbcTemplate.queryForObject(SQLThread,
                     new Object[]{body.getTitle().toLowerCase()}, new threadMapper());
             return new ResponseEntity<String>(thread.getJson().toString(), HttpStatus.CONFLICT);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         String SQLForum = "select * from forum where lower(slug)=?";
 
         String SQLUser = "select * from users where lower(nickname)=?";
@@ -174,8 +177,7 @@ public class UserController {
             ObjForum thread = jdbcTemplate.queryForObject(SQLForum,
                     new Object[]{body.getForum().toLowerCase()}, new forumMapper());
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
         }
@@ -184,7 +186,7 @@ public class UserController {
             @Override
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement("insert into thread (title,author,forum,message,slug," +
-                        "votes,created) values (?,?,?,?,?,?,?::timestamptz)",new String[] {"id"});
+                        "votes,created) values (?,?,?,?,?,?,?::timestamptz)", new String[]{"id"});
                 ps.setString(1, body.getTitle());
                 ps.setString(2, body.getAuthor());
                 ps.setString(3, body.getForum());
@@ -194,52 +196,84 @@ public class UserController {
                 ps.setString(7, body.getCreated());
                 return ps;
             }
-        },holder);
-        body.setId((int)holder.getKey());
+        }, holder);
+        body.setId((int) holder.getKey());
         return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
-     }
-
+    }
 
 
     @RequestMapping(path = "/forum/{slug}/threads", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<String> getThreads(@PathVariable String slug,@RequestParam(value = "limit",required = false) Integer limit,
-                                             @RequestParam(value = "since",required = false) String since,@RequestParam(value = "desc", required = false) Boolean desc) {
+    public ResponseEntity<String> getThreads(@PathVariable String slug, @RequestParam(value = "limit", required = false) Integer limit,
+                                             @RequestParam(value = "since", required = false) String since, @RequestParam(value = "desc", required = false) boolean desc) {
         ResponseEntity<String> forum = getForum(slug);
-        if (forum.getStatusCodeValue()==404) return forum;
-        StringBuilder SQLThreads=new StringBuilder("select * from thread where forum=?");
-        if (since != null)  {
+        if (forum.getStatusCodeValue() == 404) return forum;
+        StringBuilder SQLThreads = new StringBuilder("select * from thread where forum=?");
+        if (since != null) {
             StringBuilder time = new StringBuilder(since);
-            time.replace(10,11," ");
-            since=time.toString();
-            SQLThreads.append(" and created >=?::timestamptz ");
+            time.replace(10, 11, " ");
+            since = time.toString();
+            if (desc == true) SQLThreads.append(" and created <=?::timestamptz ");
+            else SQLThreads.append(" and created >=?::timestamptz ");
         }
         SQLThreads.append(" order by created ");
-        if(desc.booleanValue()==true) SQLThreads.append(" desc ");
+        if (desc == true) SQLThreads.append(" desc ");
         List<ObjThread> threads;
-        if(limit!=null) {
+        if (limit != null) {
             SQLThreads.append(" limit ?");
-            if (since!=null) {
+            if (since != null) {
 
                 System.out.println(since);
-                threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug,since, limit}, new threadMapper());
-            }
-            else threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug,limit}, new threadMapper());
-        }
-        else{
+                threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug, since, limit}, new threadMapper());
+            } else threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug, limit}, new threadMapper());
+        } else {
 
-            if(since!=null) {
-                threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug,since}, new threadMapper());
-            }
-            else threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug},new threadMapper());
+            if (since != null) {
+                threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug, since}, new threadMapper());
+            } else threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug}, new threadMapper());
         }
         JSONArray result = new JSONArray();
         for (int i = 0; i < threads.size(); i++) {
-            StringBuilder time= new StringBuilder(threads.get(i).getCreated());
-            time.replace(10,11,"T");
+            StringBuilder time = new StringBuilder(threads.get(i).getCreated());
+            time.replace(10, 11, "T");
             time.append(":00");
             threads.get(i).setCreated(time.toString());
             result.put(threads.get(i).getJson());
         }
         return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
+    }
+
+
+    @RequestMapping(path = "/thread/{slugOrId}/create", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    public ResponseEntity<String> createPosts(@RequestBody ArrayList<ObjPost> body, @PathVariable String slugOrId) {
+        String SQLThread = "select * from thread where lower(author) = ?";
+        for (int i = 0; i < body.size(); i++) {
+            ObjThread objthread;
+            try {
+             objthread = jdbcTemplate.queryForObject(SQLThread,
+                    new Object[]{body.get(i).getAuthor().toLowerCase()}, new threadMapper());
+        } catch (Exception e) {
+            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+        }
+            body.get(i).setForum(objthread.getForum());
+            body.get(i).setThread(objthread.getId());
+            StringBuilder time = new StringBuilder(getDateTime());
+            time.replace(10,11,"T");
+            body.get(i).setCreated(time.toString());
+            if (slugOrId.matches("[A-z]+")) {
+                body.get(i).setForum(slugOrId);
+            } else body.get(i).setId(Integer.parseInt(slugOrId));
+
+            jdbcTemplate.update("insert into post (id,parent,author,message,isEdited,forum,thread,created) values (?,?,?,?,?,?,?,?::timestamptz)", body.get(i).getId(),
+                    body.get(i).getParent(), body.get(i).getAuthor(), body.get(i).getMessage(),
+                    body.get(i).getEdited(), body.get(i).getForum(), body.get(i).getThread(), body.get(i).getCreated());
+
+
+        }
+
+        JSONArray result = new JSONArray();
+        for (int i = 0; i < body.size(); i++) {
+            result.put(body.get(i).getJson());
+        }
+        return new ResponseEntity<String>(result.toString(), HttpStatus.CREATED);
     }
 }
