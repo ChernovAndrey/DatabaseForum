@@ -19,7 +19,7 @@ public class postMapper implements RowMapper<ObjPost>{
         post.setForum(rs.getString("forum"));
         post.setEdited(rs.getBoolean("isEdited"));
         post.setMessage(rs.getString("message"));
-        post.setParent(rs.getString("parent"));
+        post.setParent(rs.getInt("parent"));
         post.setThread(rs.getInt("thread"));
         return post;
     }

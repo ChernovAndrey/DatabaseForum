@@ -9,7 +9,7 @@ import org.json.JSONObject;
  */
 public class ObjPost {
     private int id;
-    private String parent;
+    private int parent;
     private String author;
     private String message;
     private boolean isEdited;
@@ -24,7 +24,7 @@ public class ObjPost {
     @JsonCreator
     public ObjPost(
             @JsonProperty("id") int id,
-            @JsonProperty("parent") String parent,
+            @JsonProperty("parent") int parent,
             @JsonProperty("author") String author,
             @JsonProperty("message") String message,
             @JsonProperty("thread") int thread,
@@ -46,7 +46,7 @@ public class ObjPost {
         return id;
     }
 
-    public String getParent() {
+    public int getParent() {
         return parent;
     }
 
@@ -71,7 +71,7 @@ public class ObjPost {
         this.id = id;
     }
 
-    public void setParent(String parent) {
+    public void setParent(int parent) {
         this.parent = parent;
     }
 

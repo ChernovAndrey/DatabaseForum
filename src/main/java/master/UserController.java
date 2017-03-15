@@ -48,7 +48,8 @@ import java.util.Date;
 import java.text.DateFormat;
 
 import java.text.SimpleDateFormat;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -63,6 +64,12 @@ public class UserController {
 
         return dateFormat.format(date);
 
+    }
+
+    public static boolean checkSlugOrId(String str){
+        Pattern p = Pattern.compile("^[a-z]+");
+        Matcher m = p.matcher(str);
+        return m.matches();
     }
 
     @RequestMapping(path = "/forum/create", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
@@ -160,13 +167,16 @@ public class UserController {
     //thread
     @RequestMapping(path = "/forum/{slug}/create", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> createThread(@RequestBody ObjThread body, @PathVariable String slug) {
-        String SQLThread = "select * from thread where lower(title)= ?";
+        String SQLThread = "select * from thread where lower(title)=? or lower(slug)= ?";
         try {
             ObjThread thread = jdbcTemplate.queryForObject(SQLThread,
-                    new Object[]{body.getTitle().toLowerCase()}, new threadMapper());
+                    new Object[]{body.getTitle().toLowerCase(),body.getSlug().toLowerCase()}, new threadMapper());
+            StringBuilder time=new StringBuilder(thread.getCreated());
+            time.replace(10, 11, "T");
+            time.append(":00");
+            thread.setCreated(time.toString());
             return new ResponseEntity<String>(thread.getJson().toString(), HttpStatus.CONFLICT);
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
         String SQLForum = "select * from forum where lower(slug)=?";
 
         String SQLUser = "select * from users where lower(nickname)=?";
@@ -174,11 +184,10 @@ public class UserController {
         try {
             ObjUser user = jdbcTemplate.queryForObject(SQLUser,
                     new Object[]{body.getAuthor().toLowerCase()}, new userMapper());
-            ObjForum thread = jdbcTemplate.queryForObject(SQLForum,
+            ObjForum forum = jdbcTemplate.queryForObject(SQLForum,
                     new Object[]{body.getForum().toLowerCase()}, new forumMapper());
-
+            body.setForum(forum.getSlug());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
         }
         final KeyHolder holder = new GeneratedKeyHolder();
@@ -245,34 +254,55 @@ public class UserController {
 
     @RequestMapping(path = "/thread/{slugOrId}/create", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> createPosts(@RequestBody ArrayList<ObjPost> body, @PathVariable String slugOrId) {
+        System.out.println(body.size());
         String SQLThread = "select * from thread where lower(author) = ?";
-        for (int i = 0; i < body.size(); i++) {
+        for (int i=0;i<body.size();i++) {
+            ObjPost aBody1=body.get(i);
             ObjThread objthread;
             try {
-             objthread = jdbcTemplate.queryForObject(SQLThread,
-                    new Object[]{body.get(i).getAuthor().toLowerCase()}, new threadMapper());
-        } catch (Exception e) {
-            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
-        }
-            body.get(i).setForum(objthread.getForum());
-            body.get(i).setThread(objthread.getId());
+                objthread = jdbcTemplate.queryForObject(SQLThread,
+                        new Object[]{aBody1.getAuthor().toLowerCase()}, new threadMapper());
+            } catch (Exception e) {
+                return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+            }
+            aBody1.setForum(objthread.getForum());
+            aBody1.setThread(objthread.getId());
             StringBuilder time = new StringBuilder(getDateTime());
-            time.replace(10,11,"T");
-            body.get(i).setCreated(time.toString());
-            if (slugOrId.matches("[A-z]+")) {
-                body.get(i).setForum(slugOrId);
-            } else body.get(i).setId(Integer.parseInt(slugOrId));
-
-            jdbcTemplate.update("insert into post (id,parent,author,message,isEdited,forum,thread,created) values (?,?,?,?,?,?,?,?::timestamptz)", body.get(i).getId(),
-                    body.get(i).getParent(), body.get(i).getAuthor(), body.get(i).getMessage(),
-                    body.get(i).getEdited(), body.get(i).getForum(), body.get(i).getThread(), body.get(i).getCreated());
-
-
+            time.replace(10, 11, "T");
+            aBody1.setCreated(time.toString());
+            /*if (checkSlugOrId(slugOrId)) {
+                aBody1.setForum(slugOrId);
+            } else aBody1.setId(Integer.parseInt(slugOrId));*/
+            final KeyHolder holder = new GeneratedKeyHolder();
+            try{
+                aBody1.setId(Integer.parseInt(slugOrId));
+                jdbcTemplate.update("insert into post (id,parent,author,message,isEdited,forum,thread,created) " +
+                        "values (?,?,?,?,?,?,?,?::timestamptz)", aBody1.getId(),aBody1.getParent(), aBody1.getAuthor(),aBody1.getMessage(),aBody1.getEdited(),
+                        aBody1.getForum(),aBody1.getThread(),aBody1.getCreated());
+            }
+            catch(Exception e) {
+                jdbcTemplate.update(new PreparedStatementCreator() {
+                    @Override
+                    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                        PreparedStatement ps = connection.prepareStatement("insert into post (parent,author,message,isEdited,forum,thread,created) " +
+                                "values (?,?,?,?,?,?,?::timestamptz)", new String[]{"id"});
+                        ps.setInt(1, aBody1.getParent());
+                        ps.setString(2, aBody1.getAuthor());
+                        ps.setString(3, aBody1.getMessage());
+                        ps.setBoolean(4, aBody1.getEdited());
+                        ps.setString(5, aBody1.getForum());
+                        ps.setInt(6, aBody1.getThread());
+                        ps.setString(7, aBody1.getCreated());
+                        return ps;
+                    }
+                }, holder);
+                aBody1.setId((int) holder.getKey());
+            }
         }
 
         JSONArray result = new JSONArray();
-        for (int i = 0; i < body.size(); i++) {
-            result.put(body.get(i).getJson());
+        for (ObjPost aBody2 : body) {
+            result.put(aBody2.getJson());
         }
         return new ResponseEntity<String>(result.toString(), HttpStatus.CREATED);
     }
