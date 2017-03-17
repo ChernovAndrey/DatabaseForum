@@ -5,12 +5,8 @@ package master;
  */
 
 import jdk.nashorn.internal.parser.JSONParser;
-import master.objects.ObjForum;
-import master.objects.ObjPost;
-import master.objects.ObjThread;
-import master.rowmaps.forumMapper;
-import master.rowmaps.threadMapper;
-import master.rowmaps.userMapper;
+import master.objects.*;
+import master.rowmaps.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.postgresql.core.Oid;
@@ -23,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import master.objects.ObjUser;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
@@ -254,7 +249,6 @@ public class UserController {
 
     @RequestMapping(path = "/thread/{slugOrId}/create", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ResponseEntity<String> createPosts(@RequestBody ArrayList<ObjPost> body, @PathVariable String slugOrId) {
-        System.out.println(body.size());
         String SQLThread = "select * from thread where lower(author) = ?";
         for (int i=0;i<body.size();i++) {
             ObjPost aBody1=body.get(i);
@@ -306,4 +300,157 @@ public class UserController {
         }
         return new ResponseEntity<String>(result.toString(), HttpStatus.CREATED);
     }
+    @RequestMapping(path="thread/{slugOrId}/vote",method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    public ResponseEntity<String> vote(@RequestBody ObjVote body, @PathVariable String slugOrId){
+        ObjVote objvote;
+        boolean flag=false;//id
+        try {
+            body.setId(Integer.parseInt(slugOrId));
+        }
+        catch(Exception e) {
+            flag=true;//slug
+        }
+        ObjThread result;
+        if(flag==false){
+            String SQLVote="Select * from vote where (id,lower(nickname))=(?,?)";
+            List<ObjVote> lVote = jdbcTemplate.query(SQLVote,
+                    new Object[]{body.getId(),body.getNickname().toLowerCase()}, new voteMapper());
+            if (lVote.isEmpty()) {
+                jdbcTemplate.update("insert into vote (id,nickname,voice) values(?,?,?)", body.getId(), body.getNickname(), body.getVoice());
+
+                if(body.getVoice()==1) jdbcTemplate.update("update thread set votes=votes+1 where id=?", new Object[]{body.getId()});
+                else jdbcTemplate.update("update thread set votes=votes-1 where id=?", new Object[]{body.getId()});
+                result=jdbcTemplate.queryForObject("select * from thread where id =?",new Object[]{body.getId()}, new threadMapper());
+
+
+                jdbcTemplate.update("update vote set slug=? where id=?",result.getSlug(),body.getId());
+            }
+            else {
+                jdbcTemplate.update("update vote set voice=? where id=?", body.getVoice(), body.getId());
+                if ((body.getVoice() == -1)&&(lVote.get(0).getVoice()==1))
+                    jdbcTemplate.update("update thread set votes=votes-2 where id=?", new Object[]{body.getId()});
+
+                if ((body.getVoice() == 1)&&(lVote.get(0).getVoice()==-1))
+                    jdbcTemplate.update("update thread set votes=votes+2 where id=?", new Object[]{body.getId()});
+
+                result = jdbcTemplate.queryForObject("select * from thread where id =?", new Object[]{body.getId()}, new threadMapper());
+            }
+                StringBuilder time = new StringBuilder(result.getCreated());
+                time.replace(10, 11, "T");
+                time.append(":00");
+                result.setCreated(time.toString());
+                return new ResponseEntity<String>(result.getJson().toString(),HttpStatus.OK);
+
+        }
+        else{
+        body.setSlug(slugOrId);
+            String SQLVote="Select * from vote where (slug,lower(nickname))=(?,?)";
+            List<ObjVote> lVote = jdbcTemplate.query(SQLVote,
+                    new Object[]{body.getSlug(),body.getNickname().toLowerCase()}, new voteMapper());
+            if (lVote.isEmpty()) {
+                jdbcTemplate.update("insert into vote (slug,nickname,voice) values(?,?,?)", body.getSlug(), body.getNickname(), body.getVoice());
+                if(body.getVoice()==1) jdbcTemplate.update("update thread set votes=votes+1 where slug=?", slugOrId);
+                else jdbcTemplate.update("update thread set votes=votes-1 where slug=?", slugOrId);
+
+                    result=jdbcTemplate.queryForObject("select * from thread where slug =?",new Object[]{body.getSlug()}, new threadMapper());
+
+                    jdbcTemplate.update("update vote set id=? where slug=?",result.getId(),result.getSlug());
+            }
+            else {
+                jdbcTemplate.update("update vote set voice=? where slug=?", body.getVoice(), body.getSlug());
+                System.out.println(body.getVoice());
+                System.out.println(lVote.get(0).getVoice());
+                if((body.getVoice()==-1)&&(lVote.get(0).getVoice()==1)) jdbcTemplate.update("update thread set votes=votes-2 where slug=?", slugOrId);
+                if((body.getVoice()==1)&&(lVote.get(0).getVoice()==-1)) jdbcTemplate.update("update thread set votes=votes+2 where slug=?", slugOrId);
+                result = jdbcTemplate.queryForObject("select * from thread where slug =?", new Object[]{body.getSlug()}, new threadMapper());
+            }
+            StringBuilder time = new StringBuilder(result.getCreated());
+            time.replace(10, 11, "T");
+            time.append(":00");
+            result.setCreated(time.toString());
+            return new ResponseEntity<String>(result.getJson().toString(),HttpStatus.OK);
+        }
+    }
+
+
+    @RequestMapping(path = "/thread/{slugOrId}/details", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> getThread(@PathVariable String slugOrId) {
+        boolean flag=false;//id
+        int id=0;
+        String slug="";
+        try {
+             id=Integer.parseInt(slugOrId);
+        }
+        catch(Exception e) {
+            flag=true;
+            slug=slugOrId;
+        }
+        try {
+            if (flag==true) {
+                ObjThread result = jdbcTemplate.queryForObject("select * from thread where lower(slug)=?",
+                        new Object[]{slug.toLowerCase()}, new threadMapper());
+                StringBuilder time = new StringBuilder(result.getCreated());
+                time.replace(10, 11, "T");
+                time.append(":00");
+                result.setCreated(time.toString());
+                return new ResponseEntity<String>(result.getJson().toString(), HttpStatus.OK);
+            }
+            ObjThread result = jdbcTemplate.queryForObject("select * from thread where id=?",
+                    new Object[]{id}, new threadMapper());
+            StringBuilder time = new StringBuilder(result.getCreated());
+            time.replace(10, 11, "T");
+            time.append(":00");
+            result.setCreated(time.toString());
+            return new ResponseEntity<String>(result.getJson().toString(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+
+
+    @RequestMapping(path = "/thread/{slugOrId}/posts", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> getPosts(@PathVariable String slugOrId, @RequestParam(value = "limit", required = false) Integer limit,
+                                             @RequestParam(value = "sort", required = false) String sort, @RequestParam(value = "desc", required = false) boolean desc) {
+        StringBuilder SQL=new StringBuilder("select * from post where ");
+        int idThread=0;
+        boolean flag=false;//id
+        String slugThread="";
+        try{
+            idThread=Integer.parseInt(slugOrId);
+            SQL.append(" thread=");
+            SQL.append(slugOrId+" ");
+        }
+        catch(Exception e){
+            slugThread=slugOrId;
+            flag=true;
+            SQL.append(" thread=");
+            ObjThread thread= jdbcTemplate.queryForObject("select * from thread where slug=?",new Object[]{slugOrId},new threadMapper());
+            idThread=thread.getId();
+            SQL.append("\'"+idThread+"\' ");
+        }
+        List<ObjPost> posts= null;
+        SQL.append(" Order by created ");
+        if (desc==true) SQL.append(" desc ");
+        SQL.append("limit "+limit.toString());
+        System.out.println(SQL);
+        posts=jdbcTemplate.query(SQL.toString(),new postMapper());
+
+        JSONObject result=new JSONObject();
+        result.put("marker","100");
+
+        JSONArray resPost = new JSONArray();
+        for(int i=posts.size()-1;i>= 0;i--)
+        {
+            StringBuilder time = new StringBuilder(posts.get(i).getCreated());
+            time.replace(10, 11, "T");
+            time.append(":00");
+            posts.get(i).setCreated(time.toString());
+            resPost.put(posts.get(i).getJson());
+        }
+        result.put("posts",resPost);
+        return new ResponseEntity<String>(result.toString(),HttpStatus.OK);
+    }
+
 }

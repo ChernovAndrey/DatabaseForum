@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb275f87-388d-423a-9850-15a49aaf8f57" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/master/objects/ObjVote.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/master/rowmaps/voteMapper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/master/UserController.class" afterPath="$PROJECT_DIR$/target/classes/master/UserController.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/master/UserController.java" afterPath="$PROJECT_DIR$/src/main/java/master/UserController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/master/objects/ObjPost.java" afterPath="$PROJECT_DIR$/src/main/java/master/objects/ObjPost.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/master/rowmaps/postMapper.java" afterPath="$PROJECT_DIR$/src/main/java/master/rowmaps/postMapper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/master/rowmaps/threadMapper.java" afterPath="$PROJECT_DIR$/src/main/java/master/rowmaps/threadMapper.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,90 +23,90 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Application.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/master/Application.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UserController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/master/UserController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="188" column="13" lean-forward="false" selection-start-line="188" selection-start-column="13" selection-end-line="188" selection-end-column="13" />
+            <state relative-caret-position="522">
+              <caret line="447" column="27" lean-forward="true" selection-start-line="447" selection-start-column="27" selection-end-line="447" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1489586054643" expanded="true" signature="2700:2713" ph="select * fro... " />
-                <marker date="1489586054643" expanded="true" signature="2700:2718" ph="select * fro... " />
-                <marker date="1489586054643" expanded="true" signature="2700:2745" ph="select * fro... user" />
-                <marker date="1489586054643" expanded="true" signature="3099:3134" ph="select * fro... forum" />
-                <marker date="1489586054643" expanded="true" signature="3099:3145" ph="select * fro... forum" />
-                <marker date="1489586054643" expanded="true" signature="3099:3148" ph="select * fro... forum" />
-                <marker date="1489586054643" expanded="true" signature="3099:3155" ph="select * fro... forum" />
-                <marker date="1489586054643" expanded="true" signature="3099:3160" ph="select * fro... forum" />
-                <marker date="1489586054643" expanded="true" signature="3490:3561" ph="INSERT INTO forum... " />
-                <marker date="1489586054643" expanded="true" signature="3958:3999" ph="select * fro... users" />
-                <marker date="1489586054643" expanded="true" signature="4763:4826" ph="select * fro... users" />
-                <marker date="1489586054643" expanded="true" signature="4991:5057" ph="insert into users... " />
-                <marker date="1489586054643" expanded="true" signature="5695:5740" ph="select * fro... forum" />
-                <marker date="1489586054643" expanded="true" signature="6864:6905" ph="select * fro... users" />
-                <marker date="1489586054643" expanded="true" signature="6864:6906" ph="select * fro... users" />
-                <marker date="1489586054643" expanded="true" signature="7435:7507" ph="update users... " />
-                <marker date="1489586054643" expanded="true" signature="7970:8029" ph="select * fro... thread" />
-                <marker date="1489586054643" expanded="true" signature="8578:8617" ph="select * fro... forum" />
-                <marker date="1489586054643" expanded="true" signature="8647:8690" ph="select * fro... users" />
-                <marker date="1489586054643" expanded="true" signature="9484:9615" ph="insert into thread... " />
-                <marker date="1489586054643" expanded="true" signature="12744:12777" ph="select * fro... forum" />
-                <marker date="1489586054643" expanded="true" signature="12744:12788" ph="select * fro... forum" />
-                <marker date="1489586054643" expanded="true" signature="13791:13931" ph="insert into post... " />
-                <marker date="1489586054643" expanded="true" signature="14447:14590" ph="insert into post... " />
+                <marker date="1489758957601" expanded="true" signature="2518:2531" ph="select * fro... " />
+                <marker date="1489758957601" expanded="true" signature="2518:2536" ph="select * fro... " />
+                <marker date="1489758957601" expanded="true" signature="2518:2563" ph="select * fro... user" />
+                <marker date="1489758957601" expanded="true" signature="2917:2952" ph="select * fro... forum" />
+                <marker date="1489758957601" expanded="true" signature="2917:2963" ph="select * fro... forum" />
+                <marker date="1489758957601" expanded="true" signature="2917:2966" ph="select * fro... forum" />
+                <marker date="1489758957601" expanded="true" signature="2917:2973" ph="select * fro... forum" />
+                <marker date="1489758957601" expanded="true" signature="2917:2978" ph="select * fro... forum" />
+                <marker date="1489758957601" expanded="true" signature="3308:3379" ph="INSERT INTO forum... " />
+                <marker date="1489758957601" expanded="true" signature="3776:3817" ph="select * fro... users" />
+                <marker date="1489758957601" expanded="true" signature="4581:4644" ph="select * fro... users" />
+                <marker date="1489758957601" expanded="true" signature="4809:4875" ph="insert into users... " />
+                <marker date="1489758957601" expanded="true" signature="5513:5558" ph="select * fro... forum" />
+                <marker date="1489758957601" expanded="true" signature="6682:6723" ph="select * fro... users" />
+                <marker date="1489758957601" expanded="true" signature="6682:6724" ph="select * fro... users" />
+                <marker date="1489758957601" expanded="true" signature="7253:7325" ph="update users... " />
+                <marker date="1489758957601" expanded="true" signature="7788:7847" ph="select * fro... thread" />
+                <marker date="1489758957601" expanded="true" signature="8396:8435" ph="select * fro... forum" />
+                <marker date="1489758957601" expanded="true" signature="8465:8508" ph="select * fro... users" />
+                <marker date="1489758957601" expanded="true" signature="9302:9433" ph="insert into thread... " />
+                <marker date="1489758957601" expanded="true" signature="12521:12554" ph="select * fro... forum" />
+                <marker date="1489758957601" expanded="true" signature="12521:12565" ph="select * fro... forum" />
+                <marker date="1489758957601" expanded="true" signature="13568:13708" ph="insert into post... " />
+                <marker date="1489758957601" expanded="true" signature="14224:14367" ph="insert into post... " />
+                <marker date="1489758957601" expanded="true" signature="15718:15769" ph="Select * fro... vote" />
+                <marker date="1489758957601" expanded="true" signature="16006:16056" ph="insert into vote... " />
+                <marker date="1489758957601" expanded="true" signature="16172:16214" ph="update threa... " />
+                <marker date="1489758957601" expanded="true" signature="16288:16330" ph="update threa... " />
+                <marker date="1489758957601" expanded="true" signature="16414:16446" ph="select * fro... thread" />
+                <marker date="1489758957601" expanded="true" signature="16536:16568" ph="update vote " />
+                <marker date="1489758957601" expanded="true" signature="16536:16569" ph="update vote " />
+                <marker date="1489758957601" expanded="true" signature="16673:16707" ph="update voice... " />
+                <marker date="1489758957601" expanded="true" signature="16673:16740" ph="update voice... " />
+                <marker date="1489758957601" expanded="true" signature="16725:16740" ph="insert into vote... " />
+                <marker date="1489758957601" expanded="true" signature="16858:16900" ph="update threa... " />
+                <marker date="1489758957601" expanded="true" signature="17049:17091" ph="update threa... " />
+                <marker date="1489758957601" expanded="true" signature="17178:17209" ph="select * fro... voice" />
+                <marker date="1489758957601" expanded="true" signature="17178:17210" ph="select * fro... thread" />
+                <marker date="1489758957601" expanded="true" signature="17663:17716" ph="Select * fro... vote" />
+                <marker date="1489758957601" expanded="true" signature="17955:18007" ph="insert into vote... " />
+                <marker date="1489758957601" expanded="true" signature="18124:18168" ph="update threa... " />
+                <marker date="1489758957601" expanded="true" signature="18224:18268" ph="update threa... " />
+                <marker date="1489758957601" expanded="true" signature="18339:18373" ph="select * fro... thread" />
+                <marker date="1489758957601" expanded="true" signature="18468:18501" ph="update vote " />
+                <marker date="1489758957601" expanded="true" signature="18607:18643" ph="update voice... " />
+                <marker date="1489758957601" expanded="true" signature="18887:18931" ph="update threa... " />
+                <marker date="1489758957601" expanded="true" signature="19038:19082" ph="update threa... " />
+                <marker date="1489758957601" expanded="true" signature="19150:19183" ph="select * fro... thread" />
+                <marker date="1489758957601" expanded="true" signature="19150:19184" ph="select * fro... thread" />
+                <marker date="1489758957601" expanded="true" signature="20084:20124" ph="select * fro... thread" />
+                <marker date="1489758957601" expanded="true" signature="20583:20614" ph="select * fro... thread" />
+                <marker date="1489758957601" expanded="true" signature="21991:22023" ph="select id wh... " />
+                <marker date="1489758957601" expanded="true" signature="21991:22024" ph="select id wh... " />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ObjPost.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ObjPost.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/master/objects/ObjPost.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="73" column="29" lean-forward="false" selection-start-line="73" selection-start-column="29" selection-end-line="73" selection-end-column="29" />
+            <state relative-caret-position="625">
+              <caret line="76" column="0" lean-forward="true" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
               <folding>
-                <element signature="imports" expanded="true" />
                 <element signature="e#1684#1685#0" expanded="true" />
                 <element signature="e#1720#1721#0" expanded="true" />
-                <element signature="e#1931#1932#0" expanded="true" />
-                <element signature="e#1970#1971#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="postMapper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/postMapper.java">
+      <file leaf-file-name="HttpServlet.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar!/javax/servlet/http/HttpServlet.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="23" lean-forward="true" selection-start-line="0" selection-start-column="23" selection-end-line="7" selection-end-column="29" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="threadMapper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/threadMapper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="24" selection-end-column="1" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+            <state relative-caret-position="4464">
+              <caret line="265" column="0" lean-forward="false" selection-start-line="265" selection-start-column="0" selection-end-line="265" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -114,27 +116,87 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1296">
               <caret line="96" column="55" lean-forward="false" selection-start-line="96" selection-start-column="7" selection-end-line="96" selection-end-column="55" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#1143#1144#0" expanded="false" />
+                <element signature="e#1168#1169#0" expanded="false" />
+                <element signature="e#1200#1201#0" expanded="false" />
+                <element signature="e#1228#1229#0" expanded="false" />
+                <element signature="e#1261#1262#0" expanded="false" />
+                <element signature="e#1290#1291#0" expanded="false" />
+                <element signature="e#1417#1418#0" expanded="false" />
+                <element signature="e#1444#1445#0" expanded="false" />
+                <element signature="e#1473#1474#0" expanded="false" />
+                <element signature="e#1501#1502#0" expanded="false" />
+                <element signature="e#1583#1584#0" expanded="false" />
+                <element signature="e#1611#1612#0" expanded="false" />
+                <element signature="e#1653#1654#0" expanded="false" />
+                <element signature="e#1687#1688#0" expanded="false" />
+                <element signature="e#1731#1732#0" expanded="false" />
+                <element signature="e#1767#1768#0" expanded="false" />
+                <element signature="e#1935#1936#0" expanded="false" />
+                <element signature="e#1967#1968#0" expanded="false" />
+                <element signature="e#2006#2007#0" expanded="false" />
+                <element signature="e#2040#2041#0" expanded="false" />
+                <element signature="e#2085#2086#0" expanded="false" />
+                <element signature="e#2121#2122#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ObjForum.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/master/objects/ObjForum.java">
+      <file leaf-file-name="Application.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/master/Application.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="126">
-              <caret line="12" column="4" lean-forward="false" selection-start-line="12" selection-start-column="4" selection-end-line="93" selection-end-column="1" />
+              <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="voteMapper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/voteMapper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="12" column="53" lean-forward="false" selection-start-line="12" selection-start-column="53" selection-end-line="12" selection-end-column="53" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="forumMapper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/forumMapper.java">
+      <file leaf-file-name="ObjVote.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/master/objects/ObjVote.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="10" column="4" lean-forward="false" selection-start-line="10" selection-start-column="4" selection-end-line="19" selection-end-column="5" />
+            <state relative-caret-position="558">
+              <caret line="33" column="25" lean-forward="false" selection-start-line="33" selection-start-column="25" selection-end-line="33" selection-end-column="25" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="userMapper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/userMapper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="13" column="4" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="21" selection-end-column="5" />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="threadMapper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/threadMapper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="19" column="37" lean-forward="false" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -144,7 +206,25 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1188">
               <caret line="84" column="1" lean-forward="false" selection-start-line="84" selection-start-column="1" selection-end-line="84" selection-end-column="1" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#919#920#0" expanded="false" />
+                <element signature="e#950#951#0" expanded="false" />
+                <element signature="e#985#986#0" expanded="false" />
+                <element signature="e#1016#1017#0" expanded="false" />
+                <element signature="e#1048#1049#0" expanded="false" />
+                <element signature="e#1076#1077#0" expanded="false" />
+                <element signature="e#1108#1109#0" expanded="false" />
+                <element signature="e#1136#1137#0" expanded="false" />
+                <element signature="e#1249#1250#0" expanded="false" />
+                <element signature="e#1289#1290#0" expanded="false" />
+                <element signature="e#1337#1338#0" expanded="false" />
+                <element signature="e#1377#1378#0" expanded="false" />
+                <element signature="e#1419#1420#0" expanded="false" />
+                <element signature="e#1453#1454#0" expanded="false" />
+                <element signature="e#1495#1496#0" expanded="false" />
+                <element signature="e#1529#1530#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -162,6 +242,10 @@
     <findStrings>
       <find>posts</find>
       <find>getForum</find>
+      <find>details</find>
+      <find>threads</find>
+      <find>getThread</find>
+      <find>get</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -191,12 +275,14 @@
         <option value="$PROJECT_DIR$/src/main/java/master/objects/ObjUser.java" />
         <option value="$PROJECT_DIR$/src/main/java/master/rowmaps/userMapper.java" />
         <option value="$PROJECT_DIR$/src/main/resources/application.properties" />
-        <option value="$PROJECT_DIR$/src/main/java/master/rowmaps/threadMapper.java" />
         <option value="$PROJECT_DIR$/src/main/java/master/objects/ObjThread.java" />
         <option value="$PROJECT_DIR$/src/main/java/master/rowmaps/forumMapper.java" />
         <option value="$PROJECT_DIR$/src/main/java/master/Dateformat.java" />
         <option value="$PROJECT_DIR$/src/main/java/master/objects/ObjPost.java" />
         <option value="$PROJECT_DIR$/src/main/java/master/rowmaps/postMapper.java" />
+        <option value="$PROJECT_DIR$/src/main/java/master/objects/ObjVote.java" />
+        <option value="$PROJECT_DIR$/src/main/java/master/rowmaps/voteMapper.java" />
+        <option value="$PROJECT_DIR$/src/main/java/master/rowmaps/threadMapper.java" />
         <option value="$PROJECT_DIR$/src/main/java/master/UserController.java" />
       </list>
     </option>
@@ -235,8 +321,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -383,7 +469,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -900,7 +986,10 @@
       <workItem from="1489345093004" duration="599000" />
       <workItem from="1489423724036" duration="2225000" />
       <workItem from="1489512566851" duration="8803000" />
-      <workItem from="1489578035131" duration="6852000" />
+      <workItem from="1489578035131" duration="10068000" />
+      <workItem from="1489592868814" duration="400000" />
+      <workItem from="1489669804013" duration="12336000" />
+      <workItem from="1489735110376" duration="8701000" />
     </task>
     <task id="LOCAL-00001" summary=" second commit">
       <created>1489317545955</created>
@@ -937,11 +1026,18 @@
       <option name="project" value="LOCAL" />
       <updated>1489521385030</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary=" 3 commit">
+      <created>1489586122509</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1489586122509</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="109568000" />
+    <option name="totallyTimeSpent" value="134221000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
@@ -949,7 +1045,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2680938" sideWeight="0.18274933" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2680938" sideWeight="0.19460917" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -960,15 +1056,15 @@
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3282365" sideWeight="0.48948786" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3282365" sideWeight="0.47654986" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2680938" sideWeight="0.81725067" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2680938" sideWeight="0.80539083" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18490566" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18436658" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -1002,61 +1098,65 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="27" column="21" lean-forward="false" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/master/Application.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/spring-postgresql.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/master/UserController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1152">
           <caret line="64" column="10" lean-forward="false" selection-start-line="64" selection-start-column="10" selection-end-line="64" selection-end-column="10" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1489586054643" expanded="true" signature="2700:2713" ph="select * fro... " />
-            <marker date="1489586054643" expanded="true" signature="2700:2718" ph="select * fro... " />
-            <marker date="1489586054643" expanded="true" signature="2700:2745" ph="select * fro... user" />
-            <marker date="1489586054643" expanded="true" signature="3099:3134" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3145" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3148" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3155" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3160" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3490:3561" ph="INSERT INTO forum... " />
-            <marker date="1489586054643" expanded="true" signature="3958:3999" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="4763:4826" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="4991:5057" ph="insert into users... " />
-            <marker date="1489586054643" expanded="true" signature="5695:5740" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="6864:6905" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="6864:6906" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="7435:7507" ph="update users... " />
-            <marker date="1489586054643" expanded="true" signature="7970:8029" ph="select * fro... thread" />
-            <marker date="1489586054643" expanded="true" signature="8578:8617" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="8647:8690" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="9484:9615" ph="insert into thread... " />
-            <marker date="1489586054643" expanded="true" signature="12744:12777" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="12744:12788" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="13791:13931" ph="insert into post... " />
-            <marker date="1489586054643" expanded="true" signature="14447:14590" ph="insert into post... " />
+            <marker date="1489758957601" expanded="true" signature="2518:2531" ph="select * fro... " />
+            <marker date="1489758957601" expanded="true" signature="2518:2536" ph="select * fro... " />
+            <marker date="1489758957601" expanded="true" signature="2518:2563" ph="select * fro... user" />
+            <marker date="1489758957601" expanded="true" signature="2917:2952" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2963" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2966" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2973" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2978" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="3308:3379" ph="INSERT INTO forum... " />
+            <marker date="1489758957601" expanded="true" signature="3776:3817" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="4581:4644" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="4809:4875" ph="insert into users... " />
+            <marker date="1489758957601" expanded="true" signature="5513:5558" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="6682:6723" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="6682:6724" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="7253:7325" ph="update users... " />
+            <marker date="1489758957601" expanded="true" signature="7788:7847" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="8396:8435" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="8465:8508" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="9302:9433" ph="insert into thread... " />
+            <marker date="1489758957601" expanded="true" signature="12521:12554" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="12521:12565" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="13568:13708" ph="insert into post... " />
+            <marker date="1489758957601" expanded="true" signature="14224:14367" ph="insert into post... " />
+            <marker date="1489758957601" expanded="true" signature="15718:15769" ph="Select * fro... vote" />
+            <marker date="1489758957601" expanded="true" signature="16006:16056" ph="insert into vote... " />
+            <marker date="1489758957601" expanded="true" signature="16172:16214" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="16288:16330" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="16414:16446" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="16536:16568" ph="update vote " />
+            <marker date="1489758957601" expanded="true" signature="16536:16569" ph="update vote " />
+            <marker date="1489758957601" expanded="true" signature="16673:16707" ph="update voice... " />
+            <marker date="1489758957601" expanded="true" signature="16673:16740" ph="update voice... " />
+            <marker date="1489758957601" expanded="true" signature="16725:16740" ph="insert into vote... " />
+            <marker date="1489758957601" expanded="true" signature="16858:16900" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="17049:17091" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="17178:17209" ph="select * fro... voice" />
+            <marker date="1489758957601" expanded="true" signature="17178:17210" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="17663:17716" ph="Select * fro... vote" />
+            <marker date="1489758957601" expanded="true" signature="17955:18007" ph="insert into vote... " />
+            <marker date="1489758957601" expanded="true" signature="18124:18168" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="18224:18268" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="18339:18373" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="18468:18501" ph="update vote " />
+            <marker date="1489758957601" expanded="true" signature="18607:18643" ph="update voice... " />
+            <marker date="1489758957601" expanded="true" signature="18887:18931" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="19038:19082" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="19150:19183" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="19150:19184" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="20084:20124" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="20583:20614" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="21991:22023" ph="select id wh... " />
+            <marker date="1489758957601" expanded="true" signature="21991:22024" ph="select id wh... " />
           </folding>
         </state>
       </provider>
@@ -1072,6 +1172,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
           <caret line="19" column="41" lean-forward="true" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1087,7 +1190,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
           <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1096,7 +1201,25 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1224">
           <caret line="84" column="1" lean-forward="true" selection-start-line="84" selection-start-column="1" selection-end-line="84" selection-end-column="1" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#919#920#0" expanded="false" />
+            <element signature="e#950#951#0" expanded="false" />
+            <element signature="e#985#986#0" expanded="false" />
+            <element signature="e#1016#1017#0" expanded="false" />
+            <element signature="e#1048#1049#0" expanded="false" />
+            <element signature="e#1076#1077#0" expanded="false" />
+            <element signature="e#1108#1109#0" expanded="false" />
+            <element signature="e#1136#1137#0" expanded="false" />
+            <element signature="e#1249#1250#0" expanded="false" />
+            <element signature="e#1289#1290#0" expanded="false" />
+            <element signature="e#1337#1338#0" expanded="false" />
+            <element signature="e#1377#1378#0" expanded="false" />
+            <element signature="e#1419#1420#0" expanded="false" />
+            <element signature="e#1453#1454#0" expanded="false" />
+            <element signature="e#1495#1496#0" expanded="false" />
+            <element signature="e#1529#1530#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1131,30 +1254,59 @@
           <caret line="54" column="5" lean-forward="false" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1489586054643" expanded="true" signature="2700:2713" ph="select * fro... " />
-            <marker date="1489586054643" expanded="true" signature="2700:2718" ph="select * fro... " />
-            <marker date="1489586054643" expanded="true" signature="2700:2745" ph="select * fro... user" />
-            <marker date="1489586054643" expanded="true" signature="3099:3134" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3145" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3148" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3155" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3160" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3490:3561" ph="INSERT INTO forum... " />
-            <marker date="1489586054643" expanded="true" signature="3958:3999" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="4763:4826" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="4991:5057" ph="insert into users... " />
-            <marker date="1489586054643" expanded="true" signature="5695:5740" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="6864:6905" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="6864:6906" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="7435:7507" ph="update users... " />
-            <marker date="1489586054643" expanded="true" signature="7970:8029" ph="select * fro... thread" />
-            <marker date="1489586054643" expanded="true" signature="8578:8617" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="8647:8690" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="9484:9615" ph="insert into thread... " />
-            <marker date="1489586054643" expanded="true" signature="12744:12777" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="12744:12788" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="13791:13931" ph="insert into post... " />
-            <marker date="1489586054643" expanded="true" signature="14447:14590" ph="insert into post... " />
+            <marker date="1489758957601" expanded="true" signature="2518:2531" ph="select * fro... " />
+            <marker date="1489758957601" expanded="true" signature="2518:2536" ph="select * fro... " />
+            <marker date="1489758957601" expanded="true" signature="2518:2563" ph="select * fro... user" />
+            <marker date="1489758957601" expanded="true" signature="2917:2952" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2963" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2966" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2973" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2978" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="3308:3379" ph="INSERT INTO forum... " />
+            <marker date="1489758957601" expanded="true" signature="3776:3817" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="4581:4644" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="4809:4875" ph="insert into users... " />
+            <marker date="1489758957601" expanded="true" signature="5513:5558" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="6682:6723" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="6682:6724" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="7253:7325" ph="update users... " />
+            <marker date="1489758957601" expanded="true" signature="7788:7847" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="8396:8435" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="8465:8508" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="9302:9433" ph="insert into thread... " />
+            <marker date="1489758957601" expanded="true" signature="12521:12554" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="12521:12565" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="13568:13708" ph="insert into post... " />
+            <marker date="1489758957601" expanded="true" signature="14224:14367" ph="insert into post... " />
+            <marker date="1489758957601" expanded="true" signature="15718:15769" ph="Select * fro... vote" />
+            <marker date="1489758957601" expanded="true" signature="16006:16056" ph="insert into vote... " />
+            <marker date="1489758957601" expanded="true" signature="16172:16214" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="16288:16330" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="16414:16446" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="16536:16568" ph="update vote " />
+            <marker date="1489758957601" expanded="true" signature="16536:16569" ph="update vote " />
+            <marker date="1489758957601" expanded="true" signature="16673:16707" ph="update voice... " />
+            <marker date="1489758957601" expanded="true" signature="16673:16740" ph="update voice... " />
+            <marker date="1489758957601" expanded="true" signature="16725:16740" ph="insert into vote... " />
+            <marker date="1489758957601" expanded="true" signature="16858:16900" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="17049:17091" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="17178:17209" ph="select * fro... voice" />
+            <marker date="1489758957601" expanded="true" signature="17178:17210" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="17663:17716" ph="Select * fro... vote" />
+            <marker date="1489758957601" expanded="true" signature="17955:18007" ph="insert into vote... " />
+            <marker date="1489758957601" expanded="true" signature="18124:18168" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="18224:18268" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="18339:18373" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="18468:18501" ph="update vote " />
+            <marker date="1489758957601" expanded="true" signature="18607:18643" ph="update voice... " />
+            <marker date="1489758957601" expanded="true" signature="18887:18931" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="19038:19082" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="19150:19183" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="19150:19184" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="20084:20124" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="20583:20614" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="21991:22023" ph="select id wh... " />
+            <marker date="1489758957601" expanded="true" signature="21991:22024" ph="select id wh... " />
           </folding>
         </state>
       </provider>
@@ -1163,7 +1315,25 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="666">
           <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#919#920#0" expanded="false" />
+            <element signature="e#950#951#0" expanded="false" />
+            <element signature="e#985#986#0" expanded="false" />
+            <element signature="e#1016#1017#0" expanded="false" />
+            <element signature="e#1048#1049#0" expanded="false" />
+            <element signature="e#1076#1077#0" expanded="false" />
+            <element signature="e#1108#1109#0" expanded="false" />
+            <element signature="e#1136#1137#0" expanded="false" />
+            <element signature="e#1249#1250#0" expanded="false" />
+            <element signature="e#1289#1290#0" expanded="false" />
+            <element signature="e#1337#1338#0" expanded="false" />
+            <element signature="e#1377#1378#0" expanded="false" />
+            <element signature="e#1419#1420#0" expanded="false" />
+            <element signature="e#1453#1454#0" expanded="false" />
+            <element signature="e#1495#1496#0" expanded="false" />
+            <element signature="e#1529#1530#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1205,30 +1375,59 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1489586054643" expanded="true" signature="2700:2713" ph="select * fro... " />
-            <marker date="1489586054643" expanded="true" signature="2700:2718" ph="select * fro... " />
-            <marker date="1489586054643" expanded="true" signature="2700:2745" ph="select * fro... user" />
-            <marker date="1489586054643" expanded="true" signature="3099:3134" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3145" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3148" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3155" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3160" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3490:3561" ph="INSERT INTO forum... " />
-            <marker date="1489586054643" expanded="true" signature="3958:3999" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="4763:4826" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="4991:5057" ph="insert into users... " />
-            <marker date="1489586054643" expanded="true" signature="5695:5740" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="6864:6905" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="6864:6906" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="7435:7507" ph="update users... " />
-            <marker date="1489586054643" expanded="true" signature="7970:8029" ph="select * fro... thread" />
-            <marker date="1489586054643" expanded="true" signature="8578:8617" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="8647:8690" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="9484:9615" ph="insert into thread... " />
-            <marker date="1489586054643" expanded="true" signature="12744:12777" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="12744:12788" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="13791:13931" ph="insert into post... " />
-            <marker date="1489586054643" expanded="true" signature="14447:14590" ph="insert into post... " />
+            <marker date="1489758957601" expanded="true" signature="2518:2531" ph="select * fro... " />
+            <marker date="1489758957601" expanded="true" signature="2518:2536" ph="select * fro... " />
+            <marker date="1489758957601" expanded="true" signature="2518:2563" ph="select * fro... user" />
+            <marker date="1489758957601" expanded="true" signature="2917:2952" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2963" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2966" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2973" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2978" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="3308:3379" ph="INSERT INTO forum... " />
+            <marker date="1489758957601" expanded="true" signature="3776:3817" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="4581:4644" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="4809:4875" ph="insert into users... " />
+            <marker date="1489758957601" expanded="true" signature="5513:5558" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="6682:6723" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="6682:6724" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="7253:7325" ph="update users... " />
+            <marker date="1489758957601" expanded="true" signature="7788:7847" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="8396:8435" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="8465:8508" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="9302:9433" ph="insert into thread... " />
+            <marker date="1489758957601" expanded="true" signature="12521:12554" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="12521:12565" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="13568:13708" ph="insert into post... " />
+            <marker date="1489758957601" expanded="true" signature="14224:14367" ph="insert into post... " />
+            <marker date="1489758957601" expanded="true" signature="15718:15769" ph="Select * fro... vote" />
+            <marker date="1489758957601" expanded="true" signature="16006:16056" ph="insert into vote... " />
+            <marker date="1489758957601" expanded="true" signature="16172:16214" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="16288:16330" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="16414:16446" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="16536:16568" ph="update vote " />
+            <marker date="1489758957601" expanded="true" signature="16536:16569" ph="update vote " />
+            <marker date="1489758957601" expanded="true" signature="16673:16707" ph="update voice... " />
+            <marker date="1489758957601" expanded="true" signature="16673:16740" ph="update voice... " />
+            <marker date="1489758957601" expanded="true" signature="16725:16740" ph="insert into vote... " />
+            <marker date="1489758957601" expanded="true" signature="16858:16900" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="17049:17091" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="17178:17209" ph="select * fro... voice" />
+            <marker date="1489758957601" expanded="true" signature="17178:17210" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="17663:17716" ph="Select * fro... vote" />
+            <marker date="1489758957601" expanded="true" signature="17955:18007" ph="insert into vote... " />
+            <marker date="1489758957601" expanded="true" signature="18124:18168" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="18224:18268" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="18339:18373" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="18468:18501" ph="update vote " />
+            <marker date="1489758957601" expanded="true" signature="18607:18643" ph="update voice... " />
+            <marker date="1489758957601" expanded="true" signature="18887:18931" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="19038:19082" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="19150:19183" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="19150:19184" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="20084:20124" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="20583:20614" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="21991:22023" ph="select id wh... " />
+            <marker date="1489758957601" expanded="true" signature="21991:22024" ph="select id wh... " />
           </folding>
         </state>
       </provider>
@@ -1237,7 +1436,25 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="666">
           <caret line="45" column="0" lean-forward="true" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#919#920#0" expanded="false" />
+            <element signature="e#950#951#0" expanded="false" />
+            <element signature="e#985#986#0" expanded="false" />
+            <element signature="e#1016#1017#0" expanded="false" />
+            <element signature="e#1048#1049#0" expanded="false" />
+            <element signature="e#1076#1077#0" expanded="false" />
+            <element signature="e#1108#1109#0" expanded="false" />
+            <element signature="e#1136#1137#0" expanded="false" />
+            <element signature="e#1249#1250#0" expanded="false" />
+            <element signature="e#1289#1290#0" expanded="false" />
+            <element signature="e#1337#1338#0" expanded="false" />
+            <element signature="e#1377#1378#0" expanded="false" />
+            <element signature="e#1419#1420#0" expanded="false" />
+            <element signature="e#1453#1454#0" expanded="false" />
+            <element signature="e#1495#1496#0" expanded="false" />
+            <element signature="e#1529#1530#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1309,17 +1526,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/userMapper.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/master/objects/ObjForum.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="13" column="3" lean-forward="false" selection-start-line="13" selection-start-column="3" selection-end-line="21" selection-end-column="5" />
+        <state relative-caret-position="126">
+          <caret line="12" column="4" lean-forward="false" selection-start-line="12" selection-start-column="4" selection-end-line="93" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/master/Dateformat.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/postMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="23" lean-forward="false" selection-start-line="0" selection-start-column="23" selection-end-line="7" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/forumMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="10" column="4" lean-forward="false" selection-start-line="10" selection-start-column="4" selection-end-line="19" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/master/Application.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        <state relative-caret-position="126">
+          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/userMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="13" column="4" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="21" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="false" />
           </folding>
@@ -1330,6 +1577,32 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1188">
           <caret line="84" column="1" lean-forward="false" selection-start-line="84" selection-start-column="1" selection-end-line="84" selection-end-column="1" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#919#920#0" expanded="false" />
+            <element signature="e#950#951#0" expanded="false" />
+            <element signature="e#985#986#0" expanded="false" />
+            <element signature="e#1016#1017#0" expanded="false" />
+            <element signature="e#1048#1049#0" expanded="false" />
+            <element signature="e#1076#1077#0" expanded="false" />
+            <element signature="e#1108#1109#0" expanded="false" />
+            <element signature="e#1136#1137#0" expanded="false" />
+            <element signature="e#1249#1250#0" expanded="false" />
+            <element signature="e#1289#1290#0" expanded="false" />
+            <element signature="e#1337#1338#0" expanded="false" />
+            <element signature="e#1377#1378#0" expanded="false" />
+            <element signature="e#1419#1420#0" expanded="false" />
+            <element signature="e#1453#1454#0" expanded="false" />
+            <element signature="e#1495#1496#0" expanded="false" />
+            <element signature="e#1529#1530#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar!/javax/servlet/http/HttpServlet.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4464">
+          <caret line="265" column="0" lean-forward="false" selection-start-line="265" selection-start-column="0" selection-end-line="265" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1338,91 +1611,130 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1296">
           <caret line="96" column="55" lean-forward="false" selection-start-line="96" selection-start-column="7" selection-end-line="96" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/master/objects/ObjForum.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="12" column="4" lean-forward="false" selection-start-line="12" selection-start-column="4" selection-end-line="93" selection-end-column="1" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#1143#1144#0" expanded="false" />
+            <element signature="e#1168#1169#0" expanded="false" />
+            <element signature="e#1200#1201#0" expanded="false" />
+            <element signature="e#1228#1229#0" expanded="false" />
+            <element signature="e#1261#1262#0" expanded="false" />
+            <element signature="e#1290#1291#0" expanded="false" />
+            <element signature="e#1417#1418#0" expanded="false" />
+            <element signature="e#1444#1445#0" expanded="false" />
+            <element signature="e#1473#1474#0" expanded="false" />
+            <element signature="e#1501#1502#0" expanded="false" />
+            <element signature="e#1583#1584#0" expanded="false" />
+            <element signature="e#1611#1612#0" expanded="false" />
+            <element signature="e#1653#1654#0" expanded="false" />
+            <element signature="e#1687#1688#0" expanded="false" />
+            <element signature="e#1731#1732#0" expanded="false" />
+            <element signature="e#1767#1768#0" expanded="false" />
+            <element signature="e#1935#1936#0" expanded="false" />
+            <element signature="e#1967#1968#0" expanded="false" />
+            <element signature="e#2006#2007#0" expanded="false" />
+            <element signature="e#2040#2041#0" expanded="false" />
+            <element signature="e#2085#2086#0" expanded="false" />
+            <element signature="e#2121#2122#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/threadMapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="24" selection-end-column="1" />
+        <state relative-caret-position="270">
+          <caret line="19" column="37" lean-forward="false" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/master/Dateformat.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/master/objects/ObjPost.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/master/objects/ObjVote.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="73" column="29" lean-forward="false" selection-start-line="73" selection-start-column="29" selection-end-line="73" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1684#1685#0" expanded="true" />
-            <element signature="e#1720#1721#0" expanded="true" />
-            <element signature="e#1931#1932#0" expanded="true" />
-            <element signature="e#1970#1971#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="558">
+          <caret line="33" column="25" lean-forward="false" selection-start-line="33" selection-start-column="25" selection-end-line="33" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/postMapper.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/voteMapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="23" lean-forward="true" selection-start-line="0" selection-start-column="23" selection-end-line="7" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/master/rowmaps/forumMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="10" column="4" lean-forward="false" selection-start-line="10" selection-start-column="4" selection-end-line="19" selection-end-column="5" />
+        <state relative-caret-position="126">
+          <caret line="12" column="53" lean-forward="false" selection-start-line="12" selection-start-column="53" selection-end-line="12" selection-end-column="53" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/master/UserController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="188" column="13" lean-forward="false" selection-start-line="188" selection-start-column="13" selection-end-line="188" selection-end-column="13" />
+        <state relative-caret-position="522">
+          <caret line="447" column="27" lean-forward="true" selection-start-line="447" selection-start-column="27" selection-end-line="447" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1489586054643" expanded="true" signature="2700:2713" ph="select * fro... " />
-            <marker date="1489586054643" expanded="true" signature="2700:2718" ph="select * fro... " />
-            <marker date="1489586054643" expanded="true" signature="2700:2745" ph="select * fro... user" />
-            <marker date="1489586054643" expanded="true" signature="3099:3134" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3145" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3148" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3155" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3099:3160" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="3490:3561" ph="INSERT INTO forum... " />
-            <marker date="1489586054643" expanded="true" signature="3958:3999" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="4763:4826" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="4991:5057" ph="insert into users... " />
-            <marker date="1489586054643" expanded="true" signature="5695:5740" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="6864:6905" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="6864:6906" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="7435:7507" ph="update users... " />
-            <marker date="1489586054643" expanded="true" signature="7970:8029" ph="select * fro... thread" />
-            <marker date="1489586054643" expanded="true" signature="8578:8617" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="8647:8690" ph="select * fro... users" />
-            <marker date="1489586054643" expanded="true" signature="9484:9615" ph="insert into thread... " />
-            <marker date="1489586054643" expanded="true" signature="12744:12777" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="12744:12788" ph="select * fro... forum" />
-            <marker date="1489586054643" expanded="true" signature="13791:13931" ph="insert into post... " />
-            <marker date="1489586054643" expanded="true" signature="14447:14590" ph="insert into post... " />
+            <marker date="1489758957601" expanded="true" signature="2518:2531" ph="select * fro... " />
+            <marker date="1489758957601" expanded="true" signature="2518:2536" ph="select * fro... " />
+            <marker date="1489758957601" expanded="true" signature="2518:2563" ph="select * fro... user" />
+            <marker date="1489758957601" expanded="true" signature="2917:2952" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2963" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2966" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2973" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="2917:2978" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="3308:3379" ph="INSERT INTO forum... " />
+            <marker date="1489758957601" expanded="true" signature="3776:3817" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="4581:4644" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="4809:4875" ph="insert into users... " />
+            <marker date="1489758957601" expanded="true" signature="5513:5558" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="6682:6723" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="6682:6724" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="7253:7325" ph="update users... " />
+            <marker date="1489758957601" expanded="true" signature="7788:7847" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="8396:8435" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="8465:8508" ph="select * fro... users" />
+            <marker date="1489758957601" expanded="true" signature="9302:9433" ph="insert into thread... " />
+            <marker date="1489758957601" expanded="true" signature="12521:12554" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="12521:12565" ph="select * fro... forum" />
+            <marker date="1489758957601" expanded="true" signature="13568:13708" ph="insert into post... " />
+            <marker date="1489758957601" expanded="true" signature="14224:14367" ph="insert into post... " />
+            <marker date="1489758957601" expanded="true" signature="15718:15769" ph="Select * fro... vote" />
+            <marker date="1489758957601" expanded="true" signature="16006:16056" ph="insert into vote... " />
+            <marker date="1489758957601" expanded="true" signature="16172:16214" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="16288:16330" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="16414:16446" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="16536:16568" ph="update vote " />
+            <marker date="1489758957601" expanded="true" signature="16536:16569" ph="update vote " />
+            <marker date="1489758957601" expanded="true" signature="16673:16707" ph="update voice... " />
+            <marker date="1489758957601" expanded="true" signature="16673:16740" ph="update voice... " />
+            <marker date="1489758957601" expanded="true" signature="16725:16740" ph="insert into vote... " />
+            <marker date="1489758957601" expanded="true" signature="16858:16900" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="17049:17091" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="17178:17209" ph="select * fro... voice" />
+            <marker date="1489758957601" expanded="true" signature="17178:17210" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="17663:17716" ph="Select * fro... vote" />
+            <marker date="1489758957601" expanded="true" signature="17955:18007" ph="insert into vote... " />
+            <marker date="1489758957601" expanded="true" signature="18124:18168" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="18224:18268" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="18339:18373" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="18468:18501" ph="update vote " />
+            <marker date="1489758957601" expanded="true" signature="18607:18643" ph="update voice... " />
+            <marker date="1489758957601" expanded="true" signature="18887:18931" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="19038:19082" ph="update threa... " />
+            <marker date="1489758957601" expanded="true" signature="19150:19183" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="19150:19184" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="20084:20124" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="20583:20614" ph="select * fro... thread" />
+            <marker date="1489758957601" expanded="true" signature="21991:22023" ph="select id wh... " />
+            <marker date="1489758957601" expanded="true" signature="21991:22024" ph="select id wh... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/master/objects/ObjPost.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="625">
+          <caret line="76" column="0" lean-forward="true" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+          <folding>
+            <element signature="e#1684#1685#0" expanded="true" />
+            <element signature="e#1720#1721#0" expanded="true" />
           </folding>
         </state>
       </provider>
