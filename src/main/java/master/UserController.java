@@ -51,7 +51,7 @@ public class UserController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private String getDateTime() {
+    private String getDateTime(){
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss+03:00");
 
@@ -261,36 +261,59 @@ public class UserController {
             }
             aBody1.setForum(objthread.getForum());
             aBody1.setThread(objthread.getId());
-            StringBuilder time = new StringBuilder(getDateTime());
-            time.replace(10, 11, "T");
-            aBody1.setCreated(time.toString());
-            /*if (checkSlugOrId(slugOrId)) {
-                aBody1.setForum(slugOrId);
-            } else aBody1.setId(Integer.parseInt(slugOrId));*/
             final KeyHolder holder = new GeneratedKeyHolder();
+            boolean flag=false;
+
             try{
-                aBody1.setId(Integer.parseInt(slugOrId));
-                jdbcTemplate.update("insert into post (id,parent,author,message,isEdited,forum,thread,created) " +
-                        "values (?,?,?,?,?,?,?,?::timestamptz)", aBody1.getId(),aBody1.getParent(), aBody1.getAuthor(),aBody1.getMessage(),aBody1.getEdited(),
-                        aBody1.getForum(),aBody1.getThread(),aBody1.getCreated());
+                aBody1.setId(Integer.parseInt(slugOrId));//id
             }
             catch(Exception e) {
+                flag=true;//slug
+            }
+            if(flag==false){
                 jdbcTemplate.update(new PreparedStatementCreator() {
                     @Override
                     public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                        PreparedStatement ps = connection.prepareStatement("insert into post (parent,author,message,isEdited,forum,thread,created) " +
-                                "values (?,?,?,?,?,?,?::timestamptz)", new String[]{"id"});
+                        PreparedStatement ps = connection.prepareStatement("insert into post (id,parent,author,message,isEdited,forum,thread) " +
+                                "values (?,?,?,?,?,?,?)", new String[]{"created"});
+                        ps.setInt(1,aBody1.getId());
+                        ps.setInt(2, aBody1.getParent());
+                        ps.setString(3, aBody1.getAuthor());
+                        ps.setString(4, aBody1.getMessage());
+                        ps.setBoolean(5, aBody1.getEdited());
+                        ps.setString(6, aBody1.getForum());
+                        ps.setInt(7, aBody1.getThread());
+                        return ps;
+                    }
+                }, holder);
+                StringBuilder created= new StringBuilder((holder.getKeys().get("created").toString()));
+                created.replace(10,11,"T");
+                created.append("+03:00");
+                aBody1.setCreated(created.toString());
+                System.out.println("(String)holder.getKeys().get(\"created\")     "+holder.getKeys().get("created").toString());
+            }
+            else {
+                jdbcTemplate.update(new PreparedStatementCreator() {
+                    @Override
+                    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                        PreparedStatement ps = connection.prepareStatement("insert into post (parent,author,message,isEdited,forum,thread) " +
+                                "values (?,?,?,?,?,?)", new String[]{"id","created"});
                         ps.setInt(1, aBody1.getParent());
                         ps.setString(2, aBody1.getAuthor());
                         ps.setString(3, aBody1.getMessage());
                         ps.setBoolean(4, aBody1.getEdited());
                         ps.setString(5, aBody1.getForum());
                         ps.setInt(6, aBody1.getThread());
-                        ps.setString(7, aBody1.getCreated());
                         return ps;
                     }
                 }, holder);
-                aBody1.setId((int) holder.getKey());
+
+                aBody1.setId((int)holder.getKeys().get("id"));
+                StringBuilder created= new StringBuilder((holder.getKeys().get("created").toString()));
+                created.replace(10,11,"T");
+                created.append("+03:00");
+                aBody1.setCreated(created.toString());
+                System.out.println("(String)holder.getKeys().get(\"created\")     "+holder.getKeys().get("created").toString());
             }
         }
 
@@ -412,7 +435,9 @@ public class UserController {
 
     @RequestMapping(path = "/thread/{slugOrId}/posts", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> getPosts(@PathVariable String slugOrId, @RequestParam(value = "limit", required = false) Integer limit,
-                                             @RequestParam(value = "sort", required = false) String sort, @RequestParam(value = "desc", required = false) boolean desc) {
+                                             @RequestParam(value = "sort", required = false) String sort, @RequestParam(value = "desc", required = false) boolean desc,
+                                           @RequestParam(value="marker", required=false, defaultValue = "0") Integer marker) {
+
         StringBuilder SQL=new StringBuilder("select * from post where ");
         int idThread=0;
         boolean flag=false;//id
@@ -433,21 +458,24 @@ public class UserController {
         List<ObjPost> posts= null;
         SQL.append(" Order by created ");
         if (desc==true) SQL.append(" desc ");
-        SQL.append("limit "+limit.toString());
+        Integer SumLimAndMarker=limit+marker;
+        SQL.append("limit "+SumLimAndMarker.toString());
         System.out.println(SQL);
         posts=jdbcTemplate.query(SQL.toString(),new postMapper());
 
         JSONObject result=new JSONObject();
-        result.put("marker","100");
+        if(marker>posts.size()) result.put("marker",marker.toString());
+        else result.put("marker",SumLimAndMarker.toString());
 
         JSONArray resPost = new JSONArray();
-        for(int i=posts.size()-1;i>= 0;i--)
+        for(int i=marker;i<posts.size();i++)
         {
-            StringBuilder time = new StringBuilder(posts.get(i).getCreated());
+            ObjPost apost=posts.get(i);
+            StringBuilder time = new StringBuilder(apost.getCreated());
             time.replace(10, 11, "T");
             time.append(":00");
-            posts.get(i).setCreated(time.toString());
-            resPost.put(posts.get(i).getJson());
+            apost.setCreated(time.toString());
+            resPost.put(apost.getJson());
         }
         result.put("posts",resPost);
         return new ResponseEntity<String>(result.toString(),HttpStatus.OK);
