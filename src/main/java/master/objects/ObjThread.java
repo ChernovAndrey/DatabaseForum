@@ -88,6 +88,7 @@ public class ObjThread {
     public void setVotes(int votes) {
         this.votes = votes;
     }
+
     public void setCreated(String created) {
         this.created=created;
     }
