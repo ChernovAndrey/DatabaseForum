@@ -40,8 +40,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
-
+import java.sql.Date;
 import java.text.DateFormat;
 
 import java.text.SimpleDateFormat;
@@ -57,7 +56,7 @@ public class UserController {
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss+03:00");
 
-        Date date = new Date();
+        java.util.Date date = new java.util.Date();
 
         return dateFormat.format(date);
 
@@ -334,8 +333,6 @@ public class UserController {
                 countPosts++;
                 aBody1.setId((int) holder.getKeys().get("id"));
                 DateCreated.append((holder.getKeys().get("created").toString()));
-                DateCreated.replace(10, 11, "T");
-                DateCreated.append("+03:00");
             }
             else{
                 jdbcTemplate.update(new PreparedStatementCreator() {
@@ -362,6 +359,10 @@ public class UserController {
 
         JSONArray result = new JSONArray();
         for (ObjPost aBody2 : body) {
+            StringBuilder created=new StringBuilder(aBody2.getCreated());
+            created.replace(10, 11, "T");
+            created.append("+03:00");
+            aBody2.setCreated(created.toString());
             result.put(aBody2.getJson());
         }
         jdbcTemplate.update("update forum set posts=posts+? where slug=?", countPosts, objthread.getForum());
@@ -584,6 +585,7 @@ public class UserController {
             ObjPost apost = posts.get(i);
             StringBuilder time = new StringBuilder(apost.getCreated());
             time.replace(10, 11, "T");
+            time.replace(time.length()-3,time.length(),"+03");
             time.append(":00");
             apost.setCreated(time.toString());
             resPost.put(apost.getJson());
@@ -650,7 +652,6 @@ public class UserController {
         return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
     }
 
-
     @RequestMapping(path = "/post/{id}/details", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<String> getPosts(@PathVariable Integer id, @RequestParam(value = "related", required = false, defaultValue = "") String Request) {
         JSONObject result=new JSONObject();
@@ -658,11 +659,14 @@ public class UserController {
         try {
              post = jdbcTemplate.queryForObject("select * from post where id=?",
                     new Object[]{id}, new postMapper());
-            StringBuilder time = new StringBuilder(post.getCreated());
-            time.replace(10, 11, "T");
-            time.append(":00");
-            post.setCreated(time.toString());
-             result.put("post",post.getJson());
+            //StringBuilder time = new StringBuilder(post.getCreated());
+            //Timestamp created;
+                Timestamp created = jdbcTemplate.queryForObject("select created from post where id=?", new Object[]{id}, Timestamp.class);
+                SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS+03:00");
+                String time= ft.format(created);
+
+            post.setCreated(time);
+            result.put("post",post.getJson());
         }
         catch(Exception e){
             return new ResponseEntity<String>("",HttpStatus.NOT_FOUND);
@@ -716,11 +720,12 @@ public class UserController {
         body.setThread(Integer.parseInt(oldPost.get("thread").toString()));
         body.setAuthor(oldPost.get("author").toString());
         body.setParent(Integer.parseInt(oldPost.get("parent").toString()));
-        jdbcTemplate.update("update post set (id,author,created,forum,thread,isEdited,message,parent)=(?,?,?::timestamptz,?,?,?,?,?) where id= ?", body.getId(),
-                body.getAuthor(), body.getCreated(), body.getForum(), body.getThread(), body.getEdited(), body.getMessage(), body.getParent(),body.getId());
-        StringBuilder time = new StringBuilder(body.getCreated());
-        time.replace(10, 11, "T");
-        body.setCreated(time.toString());
+        jdbcTemplate.update("update post set (id,author,forum,thread,isEdited,message,parent)=(?,?,?,?,?,?,?) where id= ?", body.getId(),
+                body.getAuthor(), body.getForum(), body.getThread(), body.getEdited(), body.getMessage(), body.getParent(),body.getId());
+        Timestamp created = jdbcTemplate.queryForObject("select created from post where id=?", new Object[]{id}, Timestamp.class);
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS+03:00");
+        String time= ft.format(created);
+        body.setCreated(time);
         return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.OK);
     }
 
