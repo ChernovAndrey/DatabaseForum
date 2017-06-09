@@ -3,9 +3,7 @@ package master.objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import org.springframework.jdbc.core.RowMapper;
+
 /**
  * Created by andrey on 06.03.17.
  */
@@ -30,11 +28,11 @@ public class ObjForum {
             @JsonProperty("threads") int threads,
             @JsonProperty("posts") int posts) {
         this.id = id;
-        this.title=title;
+        this.title = title;
         this.user = user;
         this.slug = slug;
         this.threads = threads;
-        this.posts= posts;
+        this.posts = posts;
     }
 
     public int getId() {
@@ -56,7 +54,11 @@ public class ObjForum {
     public int getThreads() {
         return threads;
     }
-    public int getPosts() {return posts;}
+
+    public int getPosts() {
+        return posts;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -76,15 +78,16 @@ public class ObjForum {
     public void setPosts(int posts) {
         this.posts = posts;
     }
+
     public void setThreads(int threads) {
-        this.threads=threads;
+        this.threads = threads;
     }
 
 
     public JSONObject getJson() {
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", id);
-        jsonObject.put("title",title);
+        jsonObject.put("title", title);
         jsonObject.put("user", user);
         jsonObject.put("slug", slug);
         jsonObject.put("posts", posts);

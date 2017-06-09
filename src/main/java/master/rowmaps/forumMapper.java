@@ -1,9 +1,11 @@
 package master.rowmaps;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import master.objects.ObjForum;
 import org.springframework.jdbc.core.RowMapper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Created by andrey on 07.03.17.
  */

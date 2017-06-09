@@ -6,6 +6,8 @@ DROP TABLE IF EXISTS users;
 
 CREATE EXTENSION IF NOT EXISTS citext;
 
+SET synchronous_commit = off;
+
 CREATE SEQUENCE IF NOT EXISTS public.forum_id_seq
     INCREMENT 1
     START 1

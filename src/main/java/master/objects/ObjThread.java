@@ -12,10 +12,11 @@ public class ObjThread {
     private String title;
     private String author;
     private String forum;
-    private  String message;
+    private String message;
     private String slug;
     private int votes;
-    private String  created;
+    private String created;
+
     public ObjThread() {
 
     }
@@ -31,13 +32,13 @@ public class ObjThread {
             @JsonProperty("votes") int votes,
             @JsonProperty("created") String created) {
         this.id = id;
-        this.title=title;
+        this.title = title;
         this.author = author;
-        this.forum=forum;
-        this.message=message;
+        this.forum = forum;
+        this.message = message;
         this.slug = slug;
         this.votes = votes;
-        this.created=created;
+        this.created = created;
     }
 
     public int getId() {
@@ -52,9 +53,13 @@ public class ObjThread {
         return author;
     }
 
-    public String getForum() {return forum;}
+    public String getForum() {
+        return forum;
+    }
 
-    public  String getMessage(){return message;}
+    public String getMessage() {
+        return message;
+    }
 
     public String getSlug() {
         return slug;
@@ -63,7 +68,10 @@ public class ObjThread {
     public int getVotes() {
         return votes;
     }
-    public String getCreated() {return created;}
+
+    public String getCreated() {
+        return created;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -77,9 +85,13 @@ public class ObjThread {
         this.author = author;
     }
 
-    public  void setForum(String forum){this.forum=forum;}
+    public void setForum(String forum) {
+        this.forum = forum;
+    }
 
-    public  void setMessage(String message){this.message=message;}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
     public void setSlug(String slug) {
         this.slug = slug;
@@ -90,7 +102,7 @@ public class ObjThread {
     }
 
     public void setCreated(String created) {
-        this.created=created;
+        this.created = created;
     }
 
 
@@ -98,12 +110,12 @@ public class ObjThread {
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put("author", author);
         jsonObject.put("created", created);
-        jsonObject.put("forum",forum);
+        jsonObject.put("forum", forum);
         jsonObject.put("id", id);
-        jsonObject.put("message",message);
+        jsonObject.put("message", message);
         jsonObject.put("slug", slug);
-        jsonObject.put("title",title);
-        if(votes!=0)jsonObject.put("votes",votes);
+        jsonObject.put("title", title);
+        if (votes != 0) jsonObject.put("votes", votes);
 
         return jsonObject;
     }

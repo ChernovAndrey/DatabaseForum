@@ -14,8 +14,8 @@ public class ObjPost {
     private String message;
     private boolean isEdited;
     private String forum;
-    private  int  thread;
-    private String  created;
+    private int thread;
+    private String created;
 
     public ObjPost() {
 
@@ -32,13 +32,13 @@ public class ObjPost {
             @JsonProperty("forum") String forum,
             @JsonProperty("created") String created) {
         this.id = id;
-        this.parent=parent;
-        this.author =author;
+        this.parent = parent;
+        this.author = author;
         this.message = message;
         this.thread = thread;
-        this.isEdited= isEdited;
-        this.forum=forum;
-        this.created=created;
+        this.isEdited = isEdited;
+        this.forum = forum;
+        this.created = created;
 
     }
 
@@ -61,11 +61,18 @@ public class ObjPost {
     public int getThread() {
         return thread;
     }
-    public String getForum() {return forum;}
 
-    public boolean getEdited() {return isEdited;}
+    public String getForum() {
+        return forum;
+    }
 
-    public String getCreated() {return  created;}
+    public boolean getEdited() {
+        return isEdited;
+    }
+
+    public String getCreated() {
+        return created;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -84,20 +91,25 @@ public class ObjPost {
     }
 
     public void setEdited(boolean isEdited) {
-        this.isEdited= isEdited;
+        this.isEdited = isEdited;
     }
+
     public void setThread(int thread) {
-        this.thread=thread;
+        this.thread = thread;
     }
 
-    public void setForum(String forum){this.forum=forum;}
+    public void setForum(String forum) {
+        this.forum = forum;
+    }
 
-    public  void setCreated(String created) {this.created=created;}
+    public void setCreated(String created) {
+        this.created = created;
+    }
 
     public JSONObject getJson() {
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", id);
-        jsonObject.put("author",author);
+        jsonObject.put("author", author);
         jsonObject.put("message", message);
         jsonObject.put("parent", parent);
         jsonObject.put("isEdited", isEdited);

@@ -8,7 +8,7 @@ import org.json.JSONObject;
  * Created by andrey on 05.03.17.
  */
 public class ObjUser {
-   // private int id;
+    // private int id;
     private String nickname;
     private String fullname;
     private String about;
@@ -20,13 +20,13 @@ public class ObjUser {
 
     @JsonCreator
     public ObjUser(
-          //  @JsonProperty("id") int id,
+            //  @JsonProperty("id") int id,
             @JsonProperty("nickname") String nickname,
             @JsonProperty("fullname") String fullname,
             @JsonProperty("about") String about,
             @JsonProperty("email") String email) {
         //this.id = id;
-        this.nickname=nickname;
+        this.nickname = nickname;
         this.fullname = fullname;
         this.about = about;
         this.email = email;
@@ -74,8 +74,8 @@ public class ObjUser {
 
     public JSONObject getJson() {
         final JSONObject jsonObject = new JSONObject();
-       // jsonObject.put("id", id);
-        jsonObject.put("nickname",nickname);
+        // jsonObject.put("id", id);
+        jsonObject.put("nickname", nickname);
         jsonObject.put("fullname", fullname);
         jsonObject.put("about", about);
         jsonObject.put("email", email);

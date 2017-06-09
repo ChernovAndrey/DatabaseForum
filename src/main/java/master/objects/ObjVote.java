@@ -9,44 +9,63 @@ import org.json.JSONObject;
  */
 public class ObjVote {
     private int id;
-    private  String slug;
+    private String slug;
     private int voice;
     private String nickname;
-    public ObjVote(){}
+
+    public ObjVote() {
+    }
 
     @JsonCreator
     public ObjVote(
             @JsonProperty("nickname") String nickname,
             @JsonProperty("slug") String slug,
             @JsonProperty("id") int id,
-            @JsonProperty("voice") int voice){
-        this.nickname=nickname;
+            @JsonProperty("voice") int voice) {
+        this.nickname = nickname;
         this.id = id;
         this.slug = slug;
         this.voice = voice;
     }
-    public String getSlug(){return slug;}
 
-    public  String getNickname() {return  nickname;}
+    public String getSlug() {
+        return slug;
+    }
 
-    public int getId(){return  id;}
+    public String getNickname() {
+        return nickname;
+    }
 
-    public int getVoice(){return voice;}
+    public int getId() {
+        return id;
+    }
+
+    public int getVoice() {
+        return voice;
+    }
 
 
-    public void setId(int id){this.id=id;}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public void setSlug(String slug){this.slug=slug;}
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
 
-    public void setVoice(int voice){this.voice=voice;}
+    public void setVoice(int voice) {
+        this.voice = voice;
+    }
 
-    public void setNickname(String nickname){this.nickname=nickname;}
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
 
     public JSONObject getJson() {
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", id);
-        jsonObject.put("nickname",nickname);
+        jsonObject.put("nickname", nickname);
         jsonObject.put("slug", slug);
         jsonObject.put("voice", voice);
         return jsonObject;
