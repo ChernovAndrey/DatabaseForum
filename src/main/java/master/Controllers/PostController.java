@@ -30,6 +30,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by andrey on 18.05.17.
@@ -37,20 +38,21 @@ import java.util.List;
 @Service
 public class PostController {
     private JdbcTemplate jdbcTemplate;
+    AtomicInteger idPosts=new AtomicInteger(1);
     PostController(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     public synchronized ResponseEntity<String> createPosts( ArrayList<ObjPost> body, String slugOrId) {
         ObjThread objThread = null;
-        String slug;
+        final String slug;
         Integer idThread;
+        final List<Object[]> posts = new ArrayList<>();
         try {
             final Integer id = Integer.parseInt(slugOrId);
             final List<ObjThread> thrList = jdbcTemplate.query("select * from thread where id=?", new Object[]{id}, new threadMapper());
             if (thrList.isEmpty()) return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
             objThread = thrList.get(0);
-            slug = objThread.getSlug();
             idThread = id;
         } catch (DataAccessException e) {
             return new ResponseEntity<String>("", HttpStatus.CONFLICT);
@@ -64,15 +66,10 @@ public class PostController {
         }
 
         Integer countPosts = 0;
-        final StringBuilder DateCreated = new StringBuilder();
+        final Timestamp now = new Timestamp(System.currentTimeMillis());
+        StringBuilder DateCreated =new StringBuilder(now.toString());
         for (int i = 0; i < body.size(); i++) {
             final ObjPost aBody1 = body.get(i);
-          /*  try {
-                objThread = jdbcTemplate.queryForObject(SQLThread,
-                        new Object[]{slug.toLowerCase()}, new threadMapper());
-            } catch (Exception e) {
-                return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
-            }*/
             try {
                 ObjUser Author = jdbcTemplate.queryForObject("select * from users where lower(nickname)=?", new Object[]{aBody1.getAuthor().toLowerCase()}, new userMapper());
             } catch (Exception e) {
@@ -85,55 +82,26 @@ public class PostController {
                     return new ResponseEntity<String>("", HttpStatus.CONFLICT);
                 }
             }
+            aBody1.setCreated(DateCreated.toString());
             aBody1.setForum(objThread.getForum());
             aBody1.setThread(objThread.getId());
-            final KeyHolder holder = new GeneratedKeyHolder();
-
-            try {
-                aBody1.setThread(Integer.parseInt(slugOrId));//id
-            } catch (Exception e) {
-                boolean flag = true;//slug
-            }
-            if (i == 0) {
-                jdbcTemplate.update(new PreparedStatementCreator() {
-                    @Override
-                    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                        PreparedStatement ps = connection.prepareStatement("insert into post (parent,author,message,isEdited,forum,thread) " +
-                                "values (?,?,?,?,?,?)", new String[]{"id", "created"});
-                        ps.setInt(1, aBody1.getParent());
-                        ps.setString(2, aBody1.getAuthor());
-                        ps.setString(3, aBody1.getMessage());
-                        ps.setBoolean(4, aBody1.getEdited());
-                        ps.setString(5, aBody1.getForum());
-                        ps.setInt(6, aBody1.getThread());
-                        return ps;
-                    }
-                }, holder);
-                countPosts++;
-                aBody1.setId((int) holder.getKeys().get("id"));
-                DateCreated.append((holder.getKeys().get("created").toString()));
-            } else {
-                jdbcTemplate.update(new PreparedStatementCreator() {
-                    @Override
-                    public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                        PreparedStatement ps = connection.prepareStatement("insert into post (parent,author,message,isEdited,forum,thread,created) " +
-                                "values (?,?,?,?,?,?,?::timestamptz)", new String[]{"id"});
-                        ps.setInt(1, aBody1.getParent());
-                        ps.setString(2, aBody1.getAuthor());
-                        ps.setString(3, aBody1.getMessage());
-                        ps.setBoolean(4, aBody1.getEdited());
-                        ps.setString(5, aBody1.getForum());
-                        ps.setInt(6, aBody1.getThread());
-                        ps.setString(7, DateCreated.toString());
-                        return ps;
-                    }
-                }, holder);
-                countPosts++;
-                aBody1.setId((int) holder.getKey());
-            }
-            aBody1.setCreated(DateCreated.toString());
-
+            aBody1.setId(idPosts.getAndIncrement());
+                posts.add(new Object[]{
+                        aBody1.getId(),
+                        aBody1.getParent(),
+                        aBody1.getAuthor(),
+                        aBody1.getMessage(),
+                        aBody1.getEdited(),
+                        aBody1.getForum(),
+                        aBody1.getThread(),
+                        aBody1.getCreated()
+                });
+            countPosts++;
         }
+
+
+        jdbcTemplate.batchUpdate("insert into post (id,parent,author,message,isEdited,forum,thread,created) "+
+                " values (?,?,?,?,?,?,?,?::timestamptz)", posts);
 
         final JSONArray result = new JSONArray();
         for (ObjPost aBody2 : body) {

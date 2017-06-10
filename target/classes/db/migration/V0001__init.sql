@@ -98,7 +98,6 @@ CREATE TABLE vote
 CREATE INDEX indexUserNickname ON users (LOWER(nickname));
 CREATE INDEX indexForumSlug ON forum (Lower(slug));
 CREATE INDEX indexThreadSlug ON thread (LOWER(slug));
-CREATE INDEX indexPostParentThread ON post (parent ASC, thread ASC);
 CREATE INDEX indexPostThread ON post (thread ASC);
 CREATE INDEX indexVoteIdNickname ON vote (id ASC, LOWER(nickname));
 CREATE INDEX indexVoteId ON vote (id ASC, LOWER(nickname));
