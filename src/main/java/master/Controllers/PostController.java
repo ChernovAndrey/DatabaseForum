@@ -41,16 +41,16 @@ public class PostController {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public ResponseEntity<String> createPosts( ArrayList<ObjPost> body, String slugOrId) {
-        final String SQLThread = "select * from thread where lower(slug) = ?";
-        String slug = null;
-        Integer idThread = 0;
+    public synchronized ResponseEntity<String> createPosts( ArrayList<ObjPost> body, String slugOrId) {
+        ObjThread objThread = null;
+        String slug;
+        Integer idThread;
         try {
             final Integer id = Integer.parseInt(slugOrId);
             final List<ObjThread> thrList = jdbcTemplate.query("select * from thread where id=?", new Object[]{id}, new threadMapper());
             if (thrList.isEmpty()) return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
-            final ObjThread thr1 = thrList.get(0);
-            slug = thr1.getSlug();
+            objThread = thrList.get(0);
+            slug = objThread.getSlug();
             idThread = id;
         } catch (DataAccessException e) {
             return new ResponseEntity<String>("", HttpStatus.CONFLICT);
@@ -59,27 +59,20 @@ public class PostController {
             final List<ObjThread> thrList;
             thrList = jdbcTemplate.query("select * from thread where lower(slug)=?", new Object[]{slug.toLowerCase()}, new threadMapper());
             if (thrList.isEmpty()) return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
-            ObjThread thr1 = thrList.get(0);
-            idThread = thr1.getId();
+             objThread = thrList.get(0);
+            idThread = objThread.getId();
         }
-        try {
-            ObjThread thr = jdbcTemplate.queryForObject("select * from thread where lower(slug)=?", new Object[]{slug.toLowerCase()}, new threadMapper());
-        } catch (Exception e) {
-            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
-        }
-        //if(thr==null) return new ResponseEntity<String>("",HttpStatus.NOT_FOUND);
 
-        ObjThread objthread = null;
         Integer countPosts = 0;
         final StringBuilder DateCreated = new StringBuilder();
         for (int i = 0; i < body.size(); i++) {
             final ObjPost aBody1 = body.get(i);
-            try {
-                objthread = jdbcTemplate.queryForObject(SQLThread,
+          /*  try {
+                objThread = jdbcTemplate.queryForObject(SQLThread,
                         new Object[]{slug.toLowerCase()}, new threadMapper());
             } catch (Exception e) {
                 return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
-            }
+            }*/
             try {
                 ObjUser Author = jdbcTemplate.queryForObject("select * from users where lower(nickname)=?", new Object[]{aBody1.getAuthor().toLowerCase()}, new userMapper());
             } catch (Exception e) {
@@ -92,8 +85,8 @@ public class PostController {
                     return new ResponseEntity<String>("", HttpStatus.CONFLICT);
                 }
             }
-            aBody1.setForum(objthread.getForum());
-            aBody1.setThread(objthread.getId());
+            aBody1.setForum(objThread.getForum());
+            aBody1.setThread(objThread.getId());
             final KeyHolder holder = new GeneratedKeyHolder();
 
             try {
@@ -150,7 +143,7 @@ public class PostController {
             aBody2.setCreated(created.toString());
             result.put(aBody2.getJson());
         }
-        jdbcTemplate.update("update forum set posts=posts+? where slug=?", countPosts, objthread.getForum());
+        jdbcTemplate.update("update forum set posts=posts+? where slug=?", countPosts, objThread.getForum());
         return new ResponseEntity<String>(result.toString(), HttpStatus.CREATED);
     }
 

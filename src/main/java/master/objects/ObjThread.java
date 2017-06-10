@@ -41,6 +41,8 @@ public class ObjThread {
         this.created = created;
     }
 
+    public void updateVotes(int i){votes+=i;}
+
     public int getId() {
         return id;
     }

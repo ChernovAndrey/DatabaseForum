@@ -4,6 +4,14 @@ DROP TABLE IF EXISTS thread;
 DROP TABLE IF EXISTS forum;
 DROP TABLE IF EXISTS users;
 
+DROP INDEX IF EXISTS indexUserNickname;
+DROP INDEX IF EXISTS indexForumSlug;
+DROP INDEX IF EXISTS indexThreadSlug;
+DROP INDEX IF EXISTS indexPostParentThread;
+DROP INDEX IF EXISTS indexPostThread;
+DROP INDEX IF EXISTS indexVoteIdNickname;
+DROP INDEX IF EXISTS indexVoteId;
+
 CREATE EXTENSION IF NOT EXISTS citext;
 
 SET synchronous_commit = off;
@@ -85,6 +93,12 @@ CREATE TABLE vote
 (
     nickname VARCHAR(255) NOT NULL,
     voice INTEGER NOT NULL,
-    id INTEGER,
-    slug varchar(255)
+    id INTEGER
 );
+CREATE INDEX indexUserNickname ON users (LOWER(nickname));
+CREATE INDEX indexForumSlug ON forum (Lower(slug));
+CREATE INDEX indexThreadSlug ON thread (LOWER(slug));
+CREATE INDEX indexPostParentThread ON post (parent ASC, thread ASC);
+CREATE INDEX indexPostThread ON post (thread ASC);
+CREATE INDEX indexVoteIdNickname ON vote (id ASC, LOWER(nickname));
+CREATE INDEX indexVoteId ON vote (id ASC, LOWER(nickname));

@@ -14,7 +14,6 @@ public class voteMapper implements RowMapper<ObjVote> {
         ObjVote vote = new ObjVote();
         vote.setId(rs.getInt("id"));
         vote.setNickname(rs.getString("nickname"));
-        vote.setSlug(rs.getString("slug"));
         vote.setVoice(rs.getInt("voice"));
         return vote;
     }
