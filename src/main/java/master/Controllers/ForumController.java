@@ -36,9 +36,9 @@ public class ForumController {
         } catch (Exception e2) {
             return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
         }
-        final String SQLForum = "select * from forum where slug= ? or \"user\" =? ";
+        final String SQLForum = "select * from forum where lower(slug)= ? or lower(\"user\") =? ";
         final List<ObjForum> forum = jdbcTemplate.query(SQLForum,
-                new Object[]{body.getSlug(), body.getUser()}, new forumMapper());
+                new Object[]{body.getSlug().toLowerCase(), body.getUser().toLowerCase()}, new forumMapper());
         if (!forum.isEmpty()) return new ResponseEntity<String>(forum.get(0).getJson().toString(), HttpStatus.CONFLICT);
         jdbcTemplate.update(
                 "INSERT INTO forum (title,\"user\",slug,posts,threads) values(?,?,?,?,?)", body.getTitle(), body.getUser(), body.getSlug(), body.getPosts(), body.getThreads());

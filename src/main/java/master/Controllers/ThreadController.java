@@ -73,7 +73,7 @@ public class ThreadController {
                 }
             }, holder);
             body.setId((int) holder.getKey());
-            jdbcTemplate.update("update forum set threads=threads+1 where slug=?", slug);
+            jdbcTemplate.update("update forum set threads=threads+1 where lower(slug)=?", slug.toLowerCase());
             return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
         }
         catch (Exception e) {

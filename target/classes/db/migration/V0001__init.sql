@@ -11,6 +11,7 @@ DROP INDEX IF EXISTS indexPostParentThread;
 DROP INDEX IF EXISTS indexPostThread;
 DROP INDEX IF EXISTS indexVoteIdNickname;
 DROP INDEX IF EXISTS indexVoteId;
+DROP INDEX IF EXISTS indexThreadForum;
 
 CREATE EXTENSION IF NOT EXISTS citext;
 
@@ -97,6 +98,7 @@ CREATE TABLE vote
 );
 CREATE INDEX indexUserNickname ON users (LOWER(nickname));
 CREATE INDEX indexForumSlug ON forum (Lower(slug));
+CREATE INDEX indexThreadForum ON thread (LOWER(forum));
 CREATE INDEX indexThreadSlug ON thread (LOWER(slug));
 CREATE INDEX indexPostThread ON post (thread ASC);
 CREATE INDEX indexVoteIdNickname ON vote (id ASC, LOWER(nickname));

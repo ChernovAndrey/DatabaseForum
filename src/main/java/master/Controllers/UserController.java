@@ -83,15 +83,15 @@ public class UserController {
         final ResponseEntity<String> forum = forumController.getForum(slug);
         if (forum.getStatusCodeValue() == 404) return forum;
         StringBuilder SQL = new StringBuilder("select *" +
-                "from users where nickname in " +
-                "(select nickname from users u full join thread t on lower(u.nickname)=lower(t.author)" +
+                "from users where lower(nickname) in " +
+                "(select lower(nickname) from users u full join thread t on lower(u.nickname)=lower(t.author)" +
                 "full join post p on lower(u.nickname)=lower(p.author) where lower(t.forum)=lower(?) or " +
-                "lower(p.forum)=lower(?)  group by u.nickname order by nickname ) ");
+                "lower(p.forum)=lower(?)  group by lower(u.nickname) order by lower(nickname) ) ");
         if (!since.equals("-1")) {
-            if (desc == false) SQL.append(" and nickname > \'").append(since).append("\' ");
-            else SQL.append(" and nickname < \'").append(since).append("\' ");
+            if (desc == false) SQL.append(" and lower(nickname) > \'").append(since.toLowerCase()).append("\' ");
+            else SQL.append(" and lower(nickname) < \'").append(since.toLowerCase()).append("\' ");
         }
-        SQL.append(" order by nickname ");
+        SQL.append(" order by lower(nickname) ");
         if (desc == true) SQL.append(" desc ");
         if (limit != -1) SQL.append("Limit " + limit.toString());
         final List<ObjUser> users = jdbcTemplate.query(SQL.toString(), new Object[]{slug.toLowerCase(), slug.toLowerCase()}, new userMapper());
