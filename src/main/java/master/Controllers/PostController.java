@@ -44,7 +44,7 @@ public class PostController {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    ConcurrentHashMap<String,ArrayList<ObjPost>> parentPost=new ConcurrentHashMap<>();
+    ConcurrentHashMap<Integer,ArrayList<ObjPost>> parentPost=new ConcurrentHashMap<>();
     public synchronized ResponseEntity<String> createPosts( ArrayList<ObjPost> body, String slugOrId) {
         ObjThread objThread = null;
         final String slug;
@@ -160,10 +160,19 @@ public class PostController {
         }
         Integer parentMarker=0;
         if (sort.equals("parent_tree")){
-            final StringBuilder SQLTree=new StringBuilder("select * from post where thread=? order by forTreeSort ");
-            if (desc) SQLTree.append(" desc ");
-            //SQLTree.append("limit ").append(SumLimAndMarker.toString());
-            final List<ObjPost> allposts = jdbcTemplate.query(SQLTree.toString(), new Object[]{idThread}, new postMapper());
+            List<ObjPost> allposts;
+            boolean flagMap=false;
+            if(parentPost.containsKey(idThread)){
+                flagMap=true;
+                allposts=parentPost.get(idThread);
+            }
+            else {
+                final StringBuilder SQLTree = new StringBuilder("select * from post where thread=? order by forTreeSort ");
+                if (desc) SQLTree.append(" desc ");
+                //SQLTree.append("limit ").append(SumLimAndMarker.toString());
+                allposts = jdbcTemplate.query(SQLTree.toString(), new Object[]{idThread}, new postMapper());
+                parentPost.put(idThread,(ArrayList<ObjPost>)allposts);
+            }
             posts=new ArrayList<>();
             boolean flagIn=false;
             if (desc) limit--;
@@ -184,14 +193,16 @@ public class PostController {
             final JSONObject result = new JSONObject();
             result.put("marker", parentMarker.toString());
             final JSONArray resPost = new JSONArray();
-            for (ObjPost apost:posts) {
-              //  final ObjPost apost = posts.get(i);
-                final StringBuilder time = new StringBuilder(apost.getCreated());
-                time.replace(10, 11, "T");
-                time.replace(time.length() - 3, time.length(), "+03");
-                time.append(":00");
-                apost.setCreated(time.toString());
-                resPost.put(apost.getJson());
+                for (ObjPost apost : posts) {
+                    //  final ObjPost apost = posts.get(i);
+                    if(flagMap==false) {
+                        final StringBuilder time = new StringBuilder(apost.getCreated());
+                        time.replace(10, 11, "T");
+                        time.replace(time.length() - 3, time.length(), "+03");
+                        time.append(":00");
+                        apost.setCreated(time.toString());
+                    }
+                    resPost.put(apost.getJson());
             }
             result.put("posts", resPost);
             return new ResponseEntity<String>(result.toString(), HttpStatus.OK);

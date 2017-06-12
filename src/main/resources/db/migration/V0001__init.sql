@@ -10,12 +10,11 @@ DROP INDEX IF EXISTS indexThreadSlug;
 DROP INDEX IF EXISTS indexPostParentThread;
 DROP INDEX IF EXISTS indexPostThread;
 DROP INDEX IF EXISTS indexVoteIdNickname;
-DROP INDEX IF EXISTS indexVoteId;
 DROP INDEX IF EXISTS indexThreadForum;
 
 CREATE EXTENSION IF NOT EXISTS citext;
 
-SET synchronous_commit = off;
+SET synchronous_commit = OFF;
 
 CREATE SEQUENCE IF NOT EXISTS public.forum_id_seq
     INCREMENT 1
@@ -50,7 +49,7 @@ CREATE TABLE forum
     id INTEGER DEFAULT nextval('forum_id_seq'::regclass) PRIMARY KEY NOT NULL,
     title varchar(255) NOT NULL,
     "user" varchar(255) NOT NULL,
-    slug varchar(255) NOT NULL,
+    slug text NOT NULL,
     posts INTEGER,
     threads INTEGER
 );
@@ -63,7 +62,7 @@ CREATE TABLE post
     author varchar(255),
     message text,
     isEdited BOOLEAN,
-    forum varchar(255) NOT NULL,
+    forum text NOT NULL,
     thread INTEGER,
     created TIMESTAMPTZ default now(),
     forTreeSort INTEGER[] DEFAULT '{}'::INTEGER[]
@@ -74,10 +73,10 @@ CREATE TABLE thread
     id INTEGER DEFAULT nextval('thread_id_seq'::regclass) PRIMARY KEY NOT NULL,
     title varchar(255) not null,
     author varchar(255),
-    forum varchar(255) not null,
+    forum Text not null,
     message TEXT,
     votes INTEGER,
-    slug varchar(255),
+    slug TEXT,
     created TIMESTAMPTZ
 );
 
@@ -101,6 +100,5 @@ CREATE INDEX indexUserNickname ON users (LOWER(nickname));
 CREATE INDEX indexForumSlug ON forum (Lower(slug));
 CREATE INDEX indexThreadForum ON thread (LOWER(forum));
 CREATE INDEX indexThreadSlug ON thread (LOWER(slug));
-CREATE INDEX indexPostThread ON post (thread ASC);
-CREATE INDEX indexVoteIdNickname ON vote (id ASC, LOWER(nickname));
-CREATE INDEX indexVoteId ON vote (id ASC, LOWER(nickname));
+CREATE INDEX indexPostThread ON post (thread);
+CREATE INDEX indexVoteIdNickname ON vote (id, LOWER(nickname));

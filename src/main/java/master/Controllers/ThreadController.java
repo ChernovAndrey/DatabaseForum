@@ -84,7 +84,7 @@ public class ThreadController {
                                              String since, boolean desc) {
         final ResponseEntity<String> forum = forumController.getForum(slug);
         if (forum.getStatusCodeValue() == 404) return forum;
-        final StringBuilder SQLThreads = new StringBuilder("select * from thread where lower(forum)=?");
+        final StringBuilder SQLThreads = new StringBuilder("select * from thread where lower(forum)=lower(?)");
         if (since != null) {
             final StringBuilder time = new StringBuilder(since);
             time.replace(10, 11, " ");
@@ -99,13 +99,13 @@ public class ThreadController {
             SQLThreads.append(" limit ?");
             if (since != null) {
 
-                threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug.toLowerCase(), since, limit}, new threadMapper());
-            } else threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug.toLowerCase(), limit}, new threadMapper());
+                threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug, since, limit}, new threadMapper());
+            } else threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug, limit}, new threadMapper());
         } else {
 
             if (since != null) {
-                threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug.toLowerCase(), since}, new threadMapper());
-            } else threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug.toLowerCase()}, new threadMapper());
+                threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug, since}, new threadMapper());
+            } else threads = jdbcTemplate.query(SQLThreads.toString(), new Object[]{slug}, new threadMapper());
         }
         final JSONArray result = new JSONArray();
         for (ObjThread thread : threads) {
