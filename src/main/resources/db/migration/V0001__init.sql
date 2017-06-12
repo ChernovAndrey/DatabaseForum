@@ -53,6 +53,7 @@ CREATE TABLE forum
     posts INTEGER,
     threads INTEGER
 );
+CREATE INDEX indexForumSlug ON forum (Lower(slug));
 
 
 CREATE TABLE post
@@ -67,6 +68,7 @@ CREATE TABLE post
     created TIMESTAMPTZ default now(),
     forTreeSort INTEGER[] DEFAULT '{}'::INTEGER[]
 );
+CREATE INDEX indexPostThread ON post (thread);
 
 CREATE TABLE thread
 (
@@ -79,6 +81,8 @@ CREATE TABLE thread
     slug TEXT,
     created TIMESTAMPTZ
 );
+CREATE INDEX indexThreadForum ON thread (LOWER(forum));
+CREATE INDEX indexThreadSlug ON thread (LOWER(slug));
 
 CREATE TABLE users
 (
@@ -88,7 +92,7 @@ CREATE TABLE users
     about TEXT,
     email varchar(255) unique not null
 );
-
+CREATE INDEX indexUserNickname ON users (LOWER(nickname));
 
 CREATE TABLE vote
 (
@@ -96,9 +100,4 @@ CREATE TABLE vote
     voice INTEGER NOT NULL,
     id INTEGER
 );
-CREATE INDEX indexUserNickname ON users (LOWER(nickname));
-CREATE INDEX indexForumSlug ON forum (Lower(slug));
-CREATE INDEX indexThreadForum ON thread (LOWER(forum));
-CREATE INDEX indexThreadSlug ON thread (LOWER(slug));
-CREATE INDEX indexPostThread ON post (thread);
 CREATE INDEX indexVoteIdNickname ON vote (id, LOWER(nickname));

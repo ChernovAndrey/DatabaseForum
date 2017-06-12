@@ -44,7 +44,7 @@ public class PostController {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    ConcurrentHashMap<Integer,ArrayList<ObjPost>> parentPost=new ConcurrentHashMap<>();
+   // ConcurrentHashMap<Integer,ArrayList<ObjPost>> parentPost=new ConcurrentHashMap<>();
     public synchronized ResponseEntity<String> createPosts( ArrayList<ObjPost> body, String slugOrId) {
         ObjThread objThread = null;
         final String slug;
@@ -160,19 +160,18 @@ public class PostController {
         }
         Integer parentMarker=0;
         if (sort.equals("parent_tree")){
-            List<ObjPost> allposts;
-            boolean flagMap=false;
+     /*       boolean flagMap=false;
             if(parentPost.containsKey(idThread)){
                 flagMap=true;
                 allposts=parentPost.get(idThread);
             }
-            else {
+            else {*/
                 final StringBuilder SQLTree = new StringBuilder("select * from post where thread=? order by forTreeSort ");
                 if (desc) SQLTree.append(" desc ");
                 //SQLTree.append("limit ").append(SumLimAndMarker.toString());
-                allposts = jdbcTemplate.query(SQLTree.toString(), new Object[]{idThread}, new postMapper());
-                parentPost.put(idThread,(ArrayList<ObjPost>)allposts);
-            }
+            List<ObjPost> allposts = jdbcTemplate.query(SQLTree.toString(), new Object[]{idThread}, new postMapper());
+              //  parentPost.put(idThread,(ArrayList<ObjPost>)allposts);
+            //}
             posts=new ArrayList<>();
             boolean flagIn=false;
             if (desc) limit--;
@@ -195,13 +194,13 @@ public class PostController {
             final JSONArray resPost = new JSONArray();
                 for (ObjPost apost : posts) {
                     //  final ObjPost apost = posts.get(i);
-                    if(flagMap==false) {
+                    //if(flagMap==false) {
                         final StringBuilder time = new StringBuilder(apost.getCreated());
                         time.replace(10, 11, "T");
                         time.replace(time.length() - 3, time.length(), "+03");
                         time.append(":00");
                         apost.setCreated(time.toString());
-                    }
+                   // }
                     resPost.put(apost.getJson());
             }
             result.put("posts", resPost);

@@ -35,11 +35,7 @@ public class ServiceContoller {
 
 
     public ResponseEntity<String> clear() {
-        jdbcTemplate.update("delete from users");
-        jdbcTemplate.update("delete from forum");
-        jdbcTemplate.update("delete from thread");
-        jdbcTemplate.update("delete from vote");
-        jdbcTemplate.update("delete from post");
+        jdbcTemplate.update("TRUNCATE post; TRUNCATE forum CASCADE; TRUNCATE thread CASCADE; TRUNCATE users; TRUNCATE vote;");
         return new ResponseEntity<String>("", HttpStatus.OK);
     }
 
