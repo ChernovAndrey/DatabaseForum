@@ -65,7 +65,8 @@ CREATE TABLE post
     isEdited BOOLEAN,
     forum varchar(255) NOT NULL,
     thread INTEGER,
-    created TIMESTAMPTZ default now()
+    created TIMESTAMPTZ default now(),
+    forTreeSort INTEGER[] DEFAULT '{}'::INTEGER[]
 );
 
 CREATE TABLE thread
