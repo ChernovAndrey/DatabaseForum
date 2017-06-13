@@ -38,9 +38,9 @@ public class ThreadController {
     private ForumController forumController;
     public ResponseEntity<String> createThread(ObjThread body, String slug) {
         try {
-            final String SQLThread = "select * from thread where  lower(slug)= ?";
+            final String SQLThread = "select * from thread where  lower(slug)= lower(?)";
             final ObjThread thread = jdbcTemplate.queryForObject(SQLThread,
-                    new Object[]{body.getSlug().toLowerCase()}, new threadMapper());
+                    new Object[]{body.getSlug()}, new threadMapper());
             final StringBuilder time = new StringBuilder(thread.getCreated());
             time.replace(10, 11, "T");
             time.append(":00");
@@ -48,12 +48,12 @@ public class ThreadController {
             return new ResponseEntity<String>(thread.getJson().toString(), HttpStatus.CONFLICT);
         } catch (Exception ignored) {}
         try {
-            final String SQLUser = "select * from users where lower(nickname)=?";
+            final String SQLUser = "select * from users where lower(nickname)=lower(?)";
             final ObjUser user = jdbcTemplate.queryForObject(SQLUser,
-                    new Object[]{body.getAuthor().toLowerCase()}, new userMapper());
-            final String SQLForum = "select * from forum where lower(slug)=?";
+                    new Object[]{body.getAuthor()}, new userMapper());
+            final String SQLForum = "select * from forum where lower(slug)=lower(?)";
             final ObjForum forum = jdbcTemplate.queryForObject(SQLForum,
-                    new Object[]{body.getForum().toLowerCase()}, new forumMapper());
+                    new Object[]{body.getForum()}, new forumMapper());
             // forum.setSlug(body.getForum());
             final KeyHolder holder = new GeneratedKeyHolder();
             body.setForum(forum.getSlug());
@@ -73,7 +73,8 @@ public class ThreadController {
                 }
             }, holder);
             body.setId((int) holder.getKey());
-            jdbcTemplate.update("update forum set threads=threads+1 where lower(slug)=?", slug.toLowerCase());
+            jdbcTemplate.update("update forum set threads=threads+1 where lower(slug)=lower(?)", slug);
+            forumController.InsertInFU(body.getAuthor(),body.getForum());
             return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
         }
         catch (Exception e) {
@@ -130,8 +131,8 @@ public class ThreadController {
         }
         try {
             if (flag) {
-                final ObjThread result = jdbcTemplate.queryForObject("select * from thread where lower(slug)=?",
-                        new Object[]{slug.toLowerCase()}, new threadMapper());
+                final ObjThread result = jdbcTemplate.queryForObject("select * from thread where lower(slug)=lower(?)",
+                        new Object[]{slug}, new threadMapper());
                 final StringBuilder time = new StringBuilder(result.getCreated());
                 time.replace(10, 11, "T");
                 time.append(":00");
@@ -172,8 +173,8 @@ public class ThreadController {
         body.setAuthor(oldThread.get("author").toString());
         body.setCreated(oldThread.get("created").toString());
         body.setForum(oldThread.get("forum").toString());
-        jdbcTemplate.update("update thread set (id,author,created,forum,slug,title,message,votes)=(?,?,?::timestamptz,?,?,?,?,?) where lower(slug)= ?", body.getId(),
-                body.getAuthor(), body.getCreated(), body.getForum(), body.getSlug(), body.getTitle(), body.getMessage(), body.getVotes(), body.getSlug().toLowerCase());
+        jdbcTemplate.update("update thread set (id,author,created,forum,slug,title,message,votes)=(?,?,?::timestamptz,?,?,?,?,?) where lower(slug)= lower(?)", body.getId(),
+                body.getAuthor(), body.getCreated(), body.getForum(), body.getSlug(), body.getTitle(), body.getMessage(), body.getVotes(), body.getSlug());
         final StringBuilder time = new StringBuilder(body.getCreated());
         time.replace(10, 11, "T");
         body.setCreated(time.toString());

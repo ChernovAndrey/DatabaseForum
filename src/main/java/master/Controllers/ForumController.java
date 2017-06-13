@@ -36,17 +36,20 @@ public class ForumController {
         } catch (Exception e2) {
             return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
         }
-        final String SQLForum = "select * from forum where lower(slug)= ? or lower(\"user\") =? ";
+        final String SQLForum = "select * from forum where lower(slug)= lower(?)";
         final List<ObjForum> forum = jdbcTemplate.query(SQLForum,
-                new Object[]{body.getSlug().toLowerCase(), body.getUser().toLowerCase()}, new forumMapper());
+                new Object[]{body.getSlug()}, new forumMapper());
         if (!forum.isEmpty()) return new ResponseEntity<String>(forum.get(0).getJson().toString(), HttpStatus.CONFLICT);
         jdbcTemplate.update(
                 "INSERT INTO forum (title,\"user\",slug,posts,threads) values(?,?,?,?,?)", body.getTitle(), body.getUser(), body.getSlug(), body.getPosts(), body.getThreads());
         return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
     }
 
+    public void InsertInFU(String user,String forum){
+        jdbcTemplate.update("Insert into ForumUser (\"user\",forum) values(?,?) ON CONFLICT DO NOTHING",user,forum);
+    }
     public ResponseEntity<String> getForum(String slug) {
-        final String SQLForum = "select * from forum where lower(slug) = ?";
+        final String SQLForum = "select * from forum where lower(slug) = lower(?)";
         try {
             final ObjForum forum = jdbcTemplate.queryForObject(SQLForum,
                     new Object[]{slug.toLowerCase()}, new forumMapper());

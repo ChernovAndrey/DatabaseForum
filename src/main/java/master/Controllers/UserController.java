@@ -32,7 +32,7 @@ public class UserController {
 
     public ResponseEntity<String> createUser(ObjUser body, String nickname) {
         body.setNickname(nickname);
-        final List<ObjUser> users = jdbcTemplate.query("select * from users where LOWER (email)=? or LOWER (nickname)=?", new Object[]{body.getEmail().toLowerCase(), body.getNickname().toLowerCase()}, new userMapper());
+        final List<ObjUser> users = jdbcTemplate.query("select * from users where LOWER(email)=lower(?) or LOWER(nickname)=lower(?)", new Object[]{body.getEmail(), body.getNickname()}, new userMapper());
         if (users.isEmpty()) {
             jdbcTemplate.update("insert into users (nickname,fullname,about,email) values (?,?,?,?)", body.getNickname(), body.getFullname(), body.getAbout(), body.getEmail());
             return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
@@ -45,10 +45,10 @@ public class UserController {
     }
 
     public ResponseEntity<String> getUser(String nickname) {
-        final String SQLUser = "select * from users where lower(nickname) = ?";
+        final String SQLUser = "select * from users where lower(nickname) = lower(?)";
         try {
             final ObjUser user = jdbcTemplate.queryForObject(SQLUser,
-                    new Object[]{nickname.toLowerCase()}, new userMapper());
+                    new Object[]{nickname}, new userMapper());
             return new ResponseEntity<String>(user.getJson().toString(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
@@ -62,7 +62,7 @@ public class UserController {
         final JSONObject oldUser = new JSONObject(resultGet.getBody());
         final JSONObject newUser = body.getJson();
         if (newUser.has("email")) {
-            final List<ObjUser> users = jdbcTemplate.query("select * from users where LOWER (email)=? ", new Object[]{body.getEmail().toLowerCase()}, new userMapper());
+            final List<ObjUser> users = jdbcTemplate.query("select * from users where LOWER (email)=lower(?) ", new Object[]{body.getEmail()}, new userMapper());
             if (!users.isEmpty()) {
                 return new ResponseEntity<String>("", HttpStatus.CONFLICT);
             }
@@ -74,7 +74,7 @@ public class UserController {
         if (!newUser.has("fullname")) body.setFullname(oldUser.get("fullname").toString());
 
         body.setNickname(nickname);
-        jdbcTemplate.update("update users set (fullname,about,email)=(?,?,?) where lower(nickname)= ?", body.getFullname(), body.getAbout(), body.getEmail(), nickname.toLowerCase());
+        jdbcTemplate.update("update users set (fullname,about,email)=(?,?,?) where lower(nickname)= lower(?)", body.getFullname(), body.getAbout(), body.getEmail(), nickname);
         return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.OK);
     }
 
@@ -82,19 +82,26 @@ public class UserController {
     public ResponseEntity<String> getUsers(String slug, Integer limit,String since, boolean desc) {
         final ResponseEntity<String> forum = forumController.getForum(slug);
         if (forum.getStatusCodeValue() == 404) return forum;
-        StringBuilder SQL = new StringBuilder("select *" +
+       /* StringBuilder SQL = new StringBuilder("select *" +
                 "from users where lower(nickname) in " +
                 "(select lower(nickname) from users u full join thread t on lower(u.nickname)=lower(t.author)" +
                 "full join post p on lower(u.nickname)=lower(p.author) where lower(t.forum)=lower(?) or " +
                 "lower(p.forum)=lower(?)  group by lower(u.nickname) order by lower(nickname) ) ");
         if (!since.equals("-1")) {
-            if (desc == false) SQL.append(" and lower(nickname) > \'").append(since.toLowerCase()).append("\' ");
-            else SQL.append(" and lower(nickname) < \'").append(since.toLowerCase()).append("\' ");
+            if (desc == false) SQL.append(" and lower(nickname) > lower(\'").append(since).append(" \') ");
+            else SQL.append(" and lower(nickname) < lower(\'").append(since).append("\' )");
         }
-        SQL.append(" order by lower(nickname) ");
+        SQL.append(" order by lower(nickname) ");*/
+        StringBuilder SQL = new StringBuilder("SELECT * FROM Users us WHERE us.nickname IN "+
+                "(SELECT \"user\" FROM ForumUser WHERE forum = ?::citext)");
+        if (!since.equals("-1")) {
+            if (desc == false) SQL.append(" and lower(us.nickname) > lower(\'").append(since).append(" \') ");
+            else SQL.append(" and lower(us.nickname) < lower(\'").append(since).append("\' )");
+        }
+        SQL.append("ORDER BY lower(us.nickname)");
         if (desc == true) SQL.append(" desc ");
         if (limit != -1) SQL.append("Limit " + limit.toString());
-        final List<ObjUser> users = jdbcTemplate.query(SQL.toString(), new Object[]{slug.toLowerCase(), slug.toLowerCase()}, new userMapper());
+        final List<ObjUser> users = jdbcTemplate.query(SQL.toString(), new Object[]{slug}, new userMapper());
         final JSONArray result = new JSONArray();
         for (ObjUser user : users) {
             result.put(user.getJson());

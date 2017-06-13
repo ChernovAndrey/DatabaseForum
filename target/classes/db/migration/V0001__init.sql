@@ -1,3 +1,5 @@
+SET synchronous_commit = OFF;
+
 DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS vote;
 DROP TABLE IF EXISTS thread;
@@ -10,10 +12,12 @@ DROP INDEX IF EXISTS indexThreadSlug;
 DROP INDEX IF EXISTS indexPostThread;
 DROP INDEX IF EXISTS indexVoteIdNickname;
 DROP INDEX IF EXISTS indexThreadForum;
-
+DROP INDEX IF EXISTS indexForumUser;
+DROP INDEX IF EXISTS indexUserEmail;
+DROP INDEX IF EXISTS indexForumONFU;
+DROP INDEX IF EXISTS indexUserONFU;
 CREATE EXTENSION IF NOT EXISTS citext;
 
-SET synchronous_commit = OFF;
 
 CREATE SEQUENCE IF NOT EXISTS public.forum_id_seq
     INCREMENT 1
@@ -47,12 +51,39 @@ CREATE TABLE forum
 (
     id INTEGER DEFAULT nextval('forum_id_seq'::regclass) PRIMARY KEY NOT NULL,
     title varchar(255) NOT NULL,
-    "user" varchar(255) NOT NULL,
-    slug text NOT NULL,
+    "user" text NOT NULL,
+    slug text NOT NULL unique,
     posts INTEGER,
     threads INTEGER
 );
-CREATE INDEX indexForumSlug ON forum (Lower(slug));
+CREATE INDEX indexForumSluglower ON forum (Lower(slug));
+CREATE INDEX indexForumSlug ON forum (slug);
+CREATE INDEX indexForumUserlower ON forum (lower("user"));
+CREATE INDEX indexForumUser ON forum(lower("user"));
+CREATE TABLE users
+(
+    id INTEGER DEFAULT nextval('users_id_seq'::regclass) PRIMARY KEY NOT NULL,
+    nickname CITEXT collate ucs_basic NOT NULL UNIQUE,
+    fullname varchar(255) NOT NULL,
+    about TEXT,
+    email varchar(255) unique not null
+);
+CREATE INDEX indexUserEmaillower ON users (LOWER(email));
+CREATE INDEX indexUserNicknamelower ON users (LOWER(nickname));
+CREATE TABLE thread
+(
+    id INTEGER DEFAULT nextval('thread_id_seq'::regclass) PRIMARY KEY NOT NULL,
+    title varchar(255) not null,
+    author citext collate ucs_basic REFERENCES users(nickname),
+    forum Text not null references forum(slug),
+    message TEXT,
+    votes INTEGER,
+    slug TEXT,
+    created TIMESTAMPTZ
+);
+
+CREATE INDEX indexThreadForum ON thread (LOWER(forum));
+CREATE INDEX indexThreadSlug ON thread (LOWER(slug));
 
 
 CREATE TABLE post
@@ -63,36 +94,14 @@ CREATE TABLE post
     message text,
     isEdited BOOLEAN,
     forum text NOT NULL,
-    thread INTEGER,
+    thread INTEGER references thread(id),
+
     created TIMESTAMPTZ default now(),
     forTreeSort INTEGER[] DEFAULT '{}'::INTEGER[]
 );
 
 CREATE INDEX indexPostThread ON post (thread ASC);
 
-CREATE TABLE thread
-(
-    id INTEGER DEFAULT nextval('thread_id_seq'::regclass) PRIMARY KEY NOT NULL,
-    title varchar(255) not null,
-    author varchar(255),
-    forum Text not null,
-    message TEXT,
-    votes INTEGER,
-    slug TEXT,
-    created TIMESTAMPTZ
-);
-CREATE INDEX indexThreadForum ON thread (LOWER(forum));
-CREATE INDEX indexThreadSlug ON thread (LOWER(slug));
-
-CREATE TABLE users
-(
-    id INTEGER DEFAULT nextval('users_id_seq'::regclass) PRIMARY KEY NOT NULL,
-    nickname CITEXT collate ucs_basic NOT NULL UNIQUE,
-    fullname varchar(255) NOT NULL,
-    about TEXT,
-    email varchar(255) unique not null
-);
-CREATE INDEX indexUserNickname ON users (LOWER(nickname));
 
 CREATE TABLE vote
 (
@@ -101,3 +110,12 @@ CREATE TABLE vote
     id INTEGER
 );
 CREATE INDEX indexVoteIdNickname ON vote (id, LOWER(nickname));
+
+CREATE TABLE IF NOT EXISTS forumUser (
+  "user" CITEXT,
+  forum CITEXT,
+  UNIQUE("user", forum)
+);
+
+CREATE INDEX IF NOT EXISTS indexUserOnFU ON forumUser ("user");
+CREATE INDEX IF NOT EXISTS  indexForumONFU ON forumUser (forum);

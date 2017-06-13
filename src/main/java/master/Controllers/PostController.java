@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * Created by andrey on 18.05.17.
@@ -39,6 +40,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class PostController {
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    ForumController forumController;
     AtomicInteger idPosts=new AtomicInteger(1);
     PostController(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -50,6 +53,7 @@ public class PostController {
         final String slug;
         Integer idThread;
         final List<Object[]> posts = new ArrayList<>();
+        final List<String> FU=new ArrayList<>();
         try {
             final Integer id = Integer.parseInt(slugOrId);
             final List<ObjThread> thrList = jdbcTemplate.query("select * from thread where id=?", new Object[]{id}, new threadMapper());
@@ -70,6 +74,7 @@ public class PostController {
         Integer countPosts = 0;
         final Timestamp now = new Timestamp(System.currentTimeMillis());
         StringBuilder DateCreated =new StringBuilder(now.toString());
+
         for (int i = 0; i < body.size(); i++) {
             final ObjPost aBody1 = body.get(i);
             try {
@@ -88,7 +93,14 @@ public class PostController {
             aBody1.setForum(objThread.getForum());
             aBody1.setThread(objThread.getId());
             aBody1.setId(idPosts.getAndIncrement());
-                posts.add(new Object[]{
+            Object[] objects=new Object[]{
+                    aBody1.getAuthor(),
+                    aBody1.getParent(),
+            };
+            if(!(FU.contains(aBody1.getAuthor()))) {
+                FU.add(aBody1.getAuthor());
+            }
+            posts.add(new Object[]{
                         aBody1.getId(),
                         aBody1.getParent(),
                         aBody1.getAuthor(),
@@ -106,7 +118,13 @@ public class PostController {
 
         jdbcTemplate.batchUpdate("insert into post (id,parent,author,message,isEdited,forum,thread,created,forTreeSort) "+
                 " values (?,?,?,?,?,?,?,?::timestamptz,array_append((SELECT forTreeSort FROM Post WHERE id = ?), ?))", posts);
+        final String forumSlug=body.get(0).getForum();
 
+        jdbcTemplate.batchUpdate("insert into ForumUser(\"user\",forum) values(?,?) ON CONFLICT DO NOTHING",
+                FU.stream()
+                        .distinct()
+                        .map(user -> new Object[]{user,forumSlug})
+                        .collect(Collectors.toList()));
         final JSONArray result = new JSONArray();
         for (ObjPost aBody2 : body) {
             final StringBuilder created = new StringBuilder(aBody2.getCreated());
@@ -254,7 +272,7 @@ public class PostController {
         final String[] array = Request.split(",");
         for(String anArray : array) {
             if (anArray.equals("user")) {
-                final ObjUser user = jdbcTemplate.queryForObject("select * from users where lower(nickname)=? ", new Object[]{post.getAuthor().toLowerCase()}, new userMapper());
+                final ObjUser user = jdbcTemplate.queryForObject("select * from users where lower(nickname)=lower(?) ", new Object[]{post.getAuthor()}, new userMapper());
                 result.put("author", user.getJson());
             }
             if (anArray.equals("thread")) {
@@ -266,7 +284,7 @@ public class PostController {
                 result.put("thread", thread.getJson());
             }
             if (anArray.equals("forum")) {
-                final ObjForum forum = jdbcTemplate.queryForObject("select * from forum where lower(slug)=? ", new Object[]{post.getForum().toLowerCase()}, new forumMapper());
+                final ObjForum forum = jdbcTemplate.queryForObject("select * from forum where lower(slug)=lower(?) ", new Object[]{post.getForum()}, new forumMapper());
                 result.put("forum", forum.getJson());
             }
         }

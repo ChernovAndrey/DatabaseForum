@@ -23,7 +23,7 @@ public class ServiceContoller {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
     public ResponseEntity<String> getStatus() {
-        final String SQLUser = "select * from users where lower(nickname) = ?";
+      //  final String SQLUser = "select * from users where lower(nickname) = lower(?)";
         final JSONObject result = new JSONObject();
         result.put("user", jdbcTemplate.queryForObject("select Count(*) from users", Integer.class));
         result.put("forum", jdbcTemplate.queryForObject("select Count(*) from forum", Integer.class));
@@ -35,7 +35,7 @@ public class ServiceContoller {
 
 
     public ResponseEntity<String> clear() {
-        jdbcTemplate.update("TRUNCATE post; TRUNCATE forum CASCADE; TRUNCATE thread CASCADE; TRUNCATE users; TRUNCATE vote;");
+        jdbcTemplate.update("TRUNCATE post; TRUNCATE forum CASCADE; TRUNCATE users CASCADE; TRUNCATE thread CASCADE; TRUNCATE vote; TRUNCATE ForumUser;");
         return new ResponseEntity<String>("", HttpStatus.OK);
     }
 
