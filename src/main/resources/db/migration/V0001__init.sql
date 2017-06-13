@@ -6,13 +6,14 @@ DROP TABLE IF EXISTS thread;
 DROP TABLE IF EXISTS forum;
 DROP TABLE IF EXISTS users;
 
-DROP INDEX IF EXISTS indexUserNickname;
+DROP INDEX IF EXISTS indexUserNicknamelower;
+DROP INDEX IF EXISTS indexUserEmaillower;
 DROP INDEX IF EXISTS indexForumSlug;
+DROP INDEX IF EXISTS indexForumSluglower;
 DROP INDEX IF EXISTS indexThreadSlug;
 DROP INDEX IF EXISTS indexPostThread;
 DROP INDEX IF EXISTS indexVoteIdNickname;
 DROP INDEX IF EXISTS indexThreadForum;
-DROP INDEX IF EXISTS indexForumUser;
 DROP INDEX IF EXISTS indexUserEmail;
 DROP INDEX IF EXISTS indexForumONFU;
 DROP INDEX IF EXISTS indexUserONFU;
@@ -58,8 +59,6 @@ CREATE TABLE forum
 );
 CREATE INDEX indexForumSluglower ON forum (Lower(slug));
 CREATE INDEX indexForumSlug ON forum (slug);
-CREATE INDEX indexForumUserlower ON forum (lower("user"));
-CREATE INDEX indexForumUser ON forum(lower("user"));
 CREATE TABLE users
 (
     id INTEGER DEFAULT nextval('users_id_seq'::regclass) PRIMARY KEY NOT NULL,
