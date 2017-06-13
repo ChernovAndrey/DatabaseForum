@@ -7,7 +7,6 @@ DROP TABLE IF EXISTS users;
 DROP INDEX IF EXISTS indexUserNickname;
 DROP INDEX IF EXISTS indexForumSlug;
 DROP INDEX IF EXISTS indexThreadSlug;
-DROP INDEX IF EXISTS indexPostParentThread;
 DROP INDEX IF EXISTS indexPostThread;
 DROP INDEX IF EXISTS indexVoteIdNickname;
 DROP INDEX IF EXISTS indexThreadForum;
@@ -68,7 +67,8 @@ CREATE TABLE post
     created TIMESTAMPTZ default now(),
     forTreeSort INTEGER[] DEFAULT '{}'::INTEGER[]
 );
-CREATE INDEX indexPostThread ON post (thread);
+
+CREATE INDEX indexPostThread ON post (thread ASC);
 
 CREATE TABLE thread
 (

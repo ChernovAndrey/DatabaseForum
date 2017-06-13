@@ -154,57 +154,25 @@ public class PostController {
                     " Join r on r.id=p.parent) select r.id, r.parent,r.author,r.message,r.isEdited,r.forum,r.thread,r.created from r where thread=? order by posts ");*/
             final StringBuilder SQLTree=new StringBuilder("select * from post where thread=? order by forTreeSort ");
             if (desc) SQLTree.append(" desc ");
-            SQLTree.append("limit ").append(SumLimAndMarker.toString());
+            SQLTree.append("limit ").append(limit.toString()).append(" OFFSET ").append(marker.toString());
             posts = jdbcTemplate.query(SQLTree.toString(), new Object[]{idThread}, new postMapper());
 
         }
         Integer parentMarker=0;
         if (sort.equals("parent_tree")){
-     /*       boolean flagMap=false;
-            if(parentPost.containsKey(idThread)){
-                flagMap=true;
-                allposts=parentPost.get(idThread);
-            }
-            else {*/
-                final StringBuilder SQLTree = new StringBuilder("select * from post where thread=? order by forTreeSort ");
-                if (desc) SQLTree.append(" desc ");
-                //SQLTree.append("limit ").append(SumLimAndMarker.toString());
-            List<ObjPost> allposts = jdbcTemplate.query(SQLTree.toString(), new Object[]{idThread}, new postMapper());
-              //  parentPost.put(idThread,(ArrayList<ObjPost>)allposts);
-            //}
-            posts=new ArrayList<>();
-            boolean flagIn=false;
-            if (desc) limit--;
-            for(int countParent=0,i=marker;((countParent<=limit)&&(i<allposts.size()));i++){
-                if(allposts.get(i).getParent()==0) countParent++;
-                if(countParent>limit){
-                    flagIn=true;
-                    if (desc) {
-                        parentMarker = i+1;
-                        posts.add(allposts.get(i));
-                    }
-                    else parentMarker = i;
-                    break;
-                }
-                posts.add(allposts.get(i));
-            }
-            if(flagIn==false) parentMarker=allposts.size();
-            final JSONObject result = new JSONObject();
-            result.put("marker", parentMarker.toString());
-            final JSONArray resPost = new JSONArray();
-                for (ObjPost apost : posts) {
-                    //  final ObjPost apost = posts.get(i);
-                    //if(flagMap==false) {
-                        final StringBuilder time = new StringBuilder(apost.getCreated());
-                        time.replace(10, 11, "T");
-                        time.replace(time.length() - 3, time.length(), "+03");
-                        time.append(":00");
-                        apost.setCreated(time.toString());
-                   // }
-                    resPost.put(apost.getJson());
-            }
-            result.put("posts", resPost);
-            return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
+            StringBuilder SQLTreeParent = new StringBuilder("WITH RECURSIVE " +
+                    "c AS (" +
+                    " SELECT * from post  WHERE thread = ?), " +
+                    " recursetree AS (" +
+                    " (SELECT * FROM c" +
+                    " WHERE parent = 0" +
+                    " ORDER BY id ");
+            if (desc) SQLTreeParent.append(" desc ");
+            SQLTreeParent.append("limit ").append(limit.toString()).append(" OFFSET ").append(marker.toString());
+            SQLTreeParent.append(") UNION ALL (SELECT c.* FROM recursetree JOIN c ON recursetree.id = c.parent))"+
+                    " SELECT * FROM recursetree ORDER BY recursetree.forTreeSort");
+            if (desc) SQLTreeParent.append(" desc ");
+            posts = jdbcTemplate.query(SQLTreeParent.toString(), new Object[]{idThread}, new postMapper());
         }
     /*    Integer parentMarker = 0;
         if (sort.equals("sparent_tr ee")) {
@@ -242,23 +210,26 @@ public class PostController {
             if (desc) SQL.append(" desc ");
             SQL.append(" , id ");
             if (desc) SQL.append(" desc ");
-            SQL.append("limit ").append(SumLimAndMarker.toString());
+            SQL.append("limit ").append(limit.toString()).append("  OFFSET ").append(marker.toString());
             posts = jdbcTemplate.query(SQL.toString(), new postMapper());
+
         }
         final JSONObject result = new JSONObject();
-            if (marker > posts.size()) result.put("marker", marker.toString());
-            else result.put("marker", SumLimAndMarker.toString());
+        if ((posts==null)||(posts.isEmpty())) result.put("marker", marker.toString());
+        else result.put("marker", SumLimAndMarker.toString());
         final JSONArray resPost = new JSONArray();
-        for (int i = marker; i < posts.size(); i++) {
-            final ObjPost apost = posts.get(i);
-            final StringBuilder time = new StringBuilder(apost.getCreated());
-            time.replace(10, 11, "T");
-            time.replace(time.length() - 3, time.length(), "+03");
-            time.append(":00");
-            apost.setCreated(time.toString());
-            resPost.put(apost.getJson());
+        if(posts!=null) {
+            for (int i = 0; i < posts.size(); i++) {
+                final ObjPost apost = posts.get(i);
+                final StringBuilder time = new StringBuilder(apost.getCreated());
+                time.replace(10, 11, "T");
+                time.replace(time.length() - 3, time.length(), "+03");
+                time.append(":00");
+                apost.setCreated(time.toString());
+                resPost.put(apost.getJson());
+            }
+            result.put("posts", resPost);
         }
-        result.put("posts", resPost);
         return new ResponseEntity<String>(result.toString(), HttpStatus.OK);
     }
 
