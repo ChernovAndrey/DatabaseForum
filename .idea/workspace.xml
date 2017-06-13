@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="eb275f87-388d-423a-9850-15a49aaf8f57" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/4105c9a2-0b2a-4feb-b4b6-e249d11fa37c/_src_/database/postgres/schema/public.zip" afterPath="$PROJECT_DIR$/.idea/dataSources/4105c9a2-0b2a-4feb-b4b6-e249d11fa37c/_src_/database/postgres/schema/public.zip" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/master/Controllers/VoteController.class" afterPath="$PROJECT_DIR$/target/classes/master/Controllers/VoteController.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/4105c9a2-0b2a-4feb-b4b6-e249d11fa37c.xml" afterPath="$PROJECT_DIR$/.idea/dataSources/4105c9a2-0b2a-4feb-b4b6-e249d11fa37c.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/master/Controllers/PostController.java" afterPath="$PROJECT_DIR$/src/main/java/master/Controllers/PostController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/db/migration/V0001__init.sql" afterPath="$PROJECT_DIR$/src/main/resources/db/migration/V0001__init.sql" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -80,8 +77,8 @@
       <file leaf-file-name="PostController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/master/Controllers/PostController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="439">
-              <caret line="85" column="121" lean-forward="true" selection-start-line="85" selection-start-column="121" selection-end-line="85" selection-end-column="121" />
+            <state relative-caret-position="18">
+              <caret line="85" column="123" lean-forward="true" selection-start-line="85" selection-start-column="123" selection-end-line="85" selection-end-column="123" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <marker date="1497391873441" expanded="true" signature="2062:2093" ph="select * fro... thread" />
@@ -226,8 +223,8 @@
       <file leaf-file-name="V0001__init.sql" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/resources/db/migration/V0001__init.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+            <state relative-caret-position="483">
+              <caret line="102" column="0" lean-forward="true" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -244,7 +241,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>users</find>
       <find>indexforum</find>
       <find>indexforumuser</find>
       <find>indexUserNickname</find>
@@ -273,6 +269,7 @@
       <find>thrlist</find>
       <find>thread</find>
       <find>post</find>
+      <find>POST</find>
       <find>objThread</find>
     </findStrings>
   </component>
@@ -326,8 +323,8 @@
         <option value="$PROJECT_DIR$/src/main/java/master/Controllers/UserController.java" />
         <option value="$PROJECT_DIR$/src/main/java/master/Controllers/VoteController.java" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/4105c9a2-0b2a-4feb-b4b6-e249d11fa37c/console.sql" />
-        <option value="$PROJECT_DIR$/src/main/resources/db/migration/V0001__init.sql" />
         <option value="$PROJECT_DIR$/src/main/java/master/Controllers/PostController.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/db/migration/V0001__init.sql" />
       </list>
     </option>
   </component>
@@ -1203,7 +1200,7 @@
       <workItem from="1497304686256" duration="5170000" />
       <workItem from="1497313746222" duration="3685000" />
       <workItem from="1497352174023" duration="23844000" />
-      <workItem from="1497383839675" duration="7893000" />
+      <workItem from="1497383839675" duration="10828000" />
     </task>
     <task id="LOCAL-00001" summary=" second commit">
       <created>1489317545955</created>
@@ -1279,7 +1276,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="369265000" />
+    <option name="totallyTimeSpent" value="372200000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
@@ -1306,7 +1303,7 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3559499" sideWeight="0.6894879" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3559499" sideWeight="0.6894879" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985386" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985386" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33194155" sideWeight="0.6141515" order="15" side_tool="false" content_ui="tabs" />
@@ -1926,8 +1923,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/master/Controllers/PostController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="439">
-          <caret line="85" column="121" lean-forward="true" selection-start-line="85" selection-start-column="121" selection-end-line="85" selection-end-column="121" />
+        <state relative-caret-position="18">
+          <caret line="85" column="123" lean-forward="true" selection-start-line="85" selection-start-column="123" selection-end-line="85" selection-end-column="123" />
           <folding>
             <element signature="imports" expanded="true" />
             <marker date="1497391873441" expanded="true" signature="2062:2093" ph="select * fro... thread" />
@@ -1955,8 +1952,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/db/migration/V0001__init.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+        <state relative-caret-position="483">
+          <caret line="102" column="0" lean-forward="true" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
           <folding />
         </state>
       </provider>

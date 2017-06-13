@@ -17,6 +17,7 @@ DROP INDEX IF EXISTS indexThreadForum;
 DROP INDEX IF EXISTS indexUserEmail;
 DROP INDEX IF EXISTS indexForumONFU;
 DROP INDEX IF EXISTS indexUserONFU;
+DROP INDEX IF EXISTS indexPostParentThread;
 CREATE EXTENSION IF NOT EXISTS citext;
 
 
@@ -98,7 +99,6 @@ CREATE TABLE post
     created TIMESTAMPTZ default now(),
     forTreeSort INTEGER[] DEFAULT '{}'::INTEGER[]
 );
-CREATE INDEX indexPostParentThread ON post (parent ASC, thread ASC);
 CREATE INDEX indexPostThread ON post (thread ASC);
 
 
