@@ -98,7 +98,7 @@ CREATE TABLE post
     created TIMESTAMPTZ default now(),
     forTreeSort INTEGER[] DEFAULT '{}'::INTEGER[]
 );
-
+CREATE INDEX indexPostParentThread ON post (parent ASC, thread ASC);
 CREATE INDEX indexPostThread ON post (thread ASC);
 
 

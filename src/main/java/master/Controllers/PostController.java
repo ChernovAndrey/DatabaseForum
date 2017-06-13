@@ -47,8 +47,7 @@ public class PostController {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-   // ConcurrentHashMap<Integer,ArrayList<ObjPost>> parentPost=new ConcurrentHashMap<>();
-    public synchronized ResponseEntity<String> createPosts( ArrayList<ObjPost> body, String slugOrId) {
+   public synchronized ResponseEntity<String> createPosts( ArrayList<ObjPost> body, String slugOrId) {
         ObjThread objThread = null;
         final String slug;
         Integer idThread;
@@ -74,14 +73,14 @@ public class PostController {
         Integer countPosts = 0;
         final Timestamp now = new Timestamp(System.currentTimeMillis());
         StringBuilder DateCreated =new StringBuilder(now.toString());
-
+       try {
+           String Author = jdbcTemplate.queryForObject("select lower(nickname) from users where lower(nickname)=?", new Object[]{body.get(0).getAuthor().toLowerCase()}, String.class);
+       } catch (Exception e) {
+           return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+       }
         for (int i = 0; i < body.size(); i++) {
             final ObjPost aBody1 = body.get(i);
-            try {
-                ObjUser Author = jdbcTemplate.queryForObject("select * from users where lower(nickname)=?", new Object[]{aBody1.getAuthor().toLowerCase()}, new userMapper());
-            } catch (Exception e) {
-                return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
-            }
+
             if (body.get(i).getParent() != 0) {
                 try {
                     Integer parentPost = (Integer) jdbcTemplate.queryForObject("select id from post where id=? and thread=?", new Object[]{body.get(i).getParent(), idThread}, Integer.class);
@@ -133,7 +132,7 @@ public class PostController {
             aBody2.setCreated(created.toString());
             result.put(aBody2.getJson());
         }
-        jdbcTemplate.update("update forum set posts=posts+? where slug=?", countPosts, objThread.getForum());
+        jdbcTemplate.update("update forum set posts=posts+? where lower(slug)=lower(?)", countPosts, objThread.getForum());
         return new ResponseEntity<String>(result.toString(), HttpStatus.CREATED);
     }
 
@@ -145,7 +144,7 @@ public class PostController {
         Integer idThread = 0;
         try {
             idThread = Integer.parseInt(slugOrId);
-            final List<ObjThread> thrList = jdbcTemplate.query("select * from thread where id=?", new Object[]{idThread}, new threadMapper());
+            final List<Integer> thrList = jdbcTemplate.queryForList("select id from thread where id=?", new Object[]{idThread}, Integer.class);
             if (thrList.isEmpty()) return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
             SQL.append(" thread=");
             SQL.append(slugOrId).append(" ");
@@ -153,13 +152,13 @@ public class PostController {
             final String slugThread = slugOrId;
             final boolean flag = true;//id
             SQL.append(" thread=");
-            final ObjThread thread;
+            //final ObjThread thread;
             try {
-                thread = jdbcTemplate.queryForObject("select * from thread where lower(slug)=?", new Object[]{slugOrId.toLowerCase()}, new threadMapper());
+                idThread  = jdbcTemplate.queryForObject("select id from thread where lower(slug)=?", new Object[]{slugOrId.toLowerCase()}, Integer.class);
             } catch (Exception e1) {
                 return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
             }
-            idThread = thread.getId();
+          //  idThread = thread.getId();
             SQL.append("\'").append(idThread).append("\' ");
         }
         List<ObjPost> posts = null;
