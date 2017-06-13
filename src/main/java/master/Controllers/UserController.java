@@ -92,8 +92,8 @@ public class UserController {
             else SQL.append(" and lower(nickname) < lower(\'").append(since).append("\' )");
         }
         SQL.append(" order by lower(nickname) ");*/
-        StringBuilder SQL = new StringBuilder("SELECT * FROM Users us WHERE us.nickname IN "+
-                "(SELECT \"user\" FROM ForumUser WHERE forum = ?::citext)");
+        StringBuilder SQL = new StringBuilder("SELECT * FROM Users us WHERE lower(us.nickname) IN "+
+                "(SELECT lower(\"user\") FROM ForumUser WHERE forum = ?::citext)");
         if (!since.equals("-1")) {
             if (desc == false) SQL.append(" and lower(us.nickname) > lower(\'").append(since).append(" \') ");
             else SQL.append(" and lower(us.nickname) < lower(\'").append(since).append("\' )");
