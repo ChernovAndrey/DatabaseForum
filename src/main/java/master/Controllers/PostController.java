@@ -29,7 +29,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -69,24 +71,32 @@ public class PostController {
              objThread = thrList.get(0);
             idThread = objThread.getId();
         }
-
         Integer countPosts = 0;
         final Timestamp now = new Timestamp(System.currentTimeMillis());
         StringBuilder DateCreated =new StringBuilder(now.toString());
-       try {
+        try {
            String Author = jdbcTemplate.queryForObject("select lower(nickname) from users where lower(nickname)=?", new Object[]{body.get(0).getAuthor().toLowerCase()}, String.class);
        } catch (Exception e) {
            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
        }
-        for (int i = 0; i < body.size(); i++) {
+       Map<Integer,Boolean> parents= new HashMap<>();
+       for (int i = 0; i < body.size(); i++) {
             final ObjPost aBody1 = body.get(i);
 
             if (body.get(i).getParent() != 0) {
-                try {
-                    Integer parentPost = (Integer) jdbcTemplate.queryForObject("select id from post where id=? and thread=?", new Object[]{body.get(i).getParent(), idThread}, Integer.class);
-                } catch (Exception e) {
-                    return new ResponseEntity<String>("", HttpStatus.CONFLICT);
+                Boolean flag = parents.get(body.get(i).getParent());
+                if (flag == null) {
+                    try {
+                        Integer parentPost = (Integer) jdbcTemplate.queryForObject("select id from post where id=? and thread=?", new Object[]{body.get(i).getParent(), idThread}, Integer.class);
+                        parents.put(body.get(i).getParent(),true);
+                        flag=true;
+                    } catch (Exception e) {
+                        parents.put(body.get(i).getParent(),false);
+                        return new ResponseEntity<String>("", HttpStatus.CONFLICT);
+                    }
                 }
+                if (flag==false) return new ResponseEntity<String>("", HttpStatus.CONFLICT);
+
             }
             aBody1.setCreated(DateCreated.toString());
             aBody1.setForum(objThread.getForum());
@@ -119,7 +129,7 @@ public class PostController {
                 " values (?,?,?,?,?,?,?,?::timestamptz,array_append((SELECT forTreeSort FROM Post WHERE id = ?), ?))", posts);
         final String forumSlug=body.get(0).getForum();
 
-        jdbcTemplate.batchUpdate("insert into ForumUser(\"user\",forum) values(?,?) ON CONFLICT DO NOTHING",
+        jdbcTemplate.batchUpdate("insert into ForumUser (\"user\",forum) values(?,?) ON CONFLICT DO NOTHING",
                 FU.stream()
                         .distinct()
                         .map(user -> new Object[]{user,forumSlug})
@@ -152,24 +162,17 @@ public class PostController {
             final String slugThread = slugOrId;
             final boolean flag = true;//id
             SQL.append(" thread=");
-            //final ObjThread thread;
             try {
                 idThread  = jdbcTemplate.queryForObject("select id from thread where lower(slug)=?", new Object[]{slugOrId.toLowerCase()}, Integer.class);
             } catch (Exception e1) {
                 return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
             }
-          //  idThread = thread.getId();
             SQL.append("\'").append(idThread).append("\' ");
         }
         List<ObjPost> posts = null;
         final Integer SumLimAndMarker = limit + marker;
         if (sort.equals("tree")) {
-      /*      final StringBuilder SQLTree = new StringBuilder("with recursive r (id,parent,author,message,isEdited,forum,thread,created,posts) AS(" +
-                    "select id,parent,author,message,isEdited,forum,thread,created,array[id] from post where parent=0 " +
-                    " Union all " +
-                    " select p.id,p.parent,p.author,p.message,p.isEdited,p.forum,p.thread,p.created, array_append(posts, p.id) from post p " +
-                    " Join r on r.id=p.parent) select r.id, r.parent,r.author,r.message,r.isEdited,r.forum,r.thread,r.created from r where thread=? order by posts ");*/
-            final StringBuilder SQLTree=new StringBuilder("select * from post where thread=? order by forTreeSort ");
+         final StringBuilder SQLTree=new StringBuilder("select * from post where thread=? order by forTreeSort ");
             if (desc) SQLTree.append(" desc ");
             SQLTree.append("limit ").append(limit.toString()).append(" OFFSET ").append(marker.toString());
             posts = jdbcTemplate.query(SQLTree.toString(), new Object[]{idThread}, new postMapper());
@@ -191,38 +194,7 @@ public class PostController {
             if (desc) SQLTreeParent.append(" desc ");
             posts = jdbcTemplate.query(SQLTreeParent.toString(), new Object[]{idThread}, new postMapper());
         }
-    /*    Integer parentMarker = 0;
-        if (sort.equals("sparent_tr ee")) {
-            final StringBuilder SQLParent = new StringBuilder("select * from post p Join thread t on (t.id=p.thread) where t.id=? and p.parent=0 order by p.id ");
-            if (desc) SQLParent.append(" desc ");
-            SQLParent.append("limit ").append(SumLimAndMarker.toString());
-            final List<ObjPost> parents = jdbcTemplate.query(SQLParent.toString(),
-                    new Object[]{idThread}, new postMapper());
-            final StringBuilder SQLParentTree=new StringBuilder("select * from post where (parent=? or id=?) and thread=? order by forTreeSort ");
-
-           /* final StringBuilder SQLParentTree = new StringBuilder("with recursive r (id,parent,author,message,isEdited,forum,thread,created,posts) AS(\n" +
-                    "select id,parent,author,message,isEdited,forum,thread,created,array[id] from post where id=? " +
-                    " Union all " +
-                    " select p.id,p.parent,p.author,p.message,p.isEdited,p.forum,p.thread,p.created, array_append(posts, p.id) from post p " +
-                    " Join r on r.id=p.parent) select r.id, r.parent,r.author,r.message,r.isEdited,r.forum,r.thread,r.created from r where thread=? order by posts ");
-            if (desc) SQLParentTree.append(" desc ");
-            boolean flagPostsAdd = false;
-            for (int i = parentMarker; i < parents.size(); i++) {
-                final int IdParent = parents.get(i).getId();
-                if (!flagPostsAdd) {
-                    posts = jdbcTemplate.query(SQLParentTree.toString(), new Object[]{IdParent, IdParent,idThread}, new postMapper());
-                    flagPostsAdd = true;
-                    parentMarker += posts.size();
-                } else {
-                    List<ObjPost> intermediateResult = jdbcTemplate.query(SQLParentTree.toString(), new Object[]{IdParent, IdParent,idThread}, new postMapper());
-                    if (intermediateResult != null) {
-                        parentMarker += intermediateResult.size();
-                        posts.addAll(intermediateResult);
-                    }
-                }
-            }
-        }*/
-        if (sort.equals("flat")) {
+     if (sort.equals("flat")) {
             SQL.append(" Order by created ");
             if (desc) SQL.append(" desc ");
             SQL.append(" , id ");
