@@ -39,7 +39,6 @@ public class PostController {
     @Autowired
     ForumController forumController;
 
-    HashSet<String> nicknames=new HashSet<>();
     AtomicInteger idPosts=new AtomicInteger(1);
     PostController(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -70,12 +69,11 @@ public class PostController {
         Integer countPosts = 0;
         final Timestamp now = new Timestamp(System.currentTimeMillis());
         StringBuilder DateCreated =new StringBuilder(now.toString());
-       /* try {
+        try {
            String Author = jdbcTemplate.queryForObject("select lower(nickname) from users where lower(nickname)=?", new Object[]{body.get(0).getAuthor().toLowerCase()}, String.class);
        } catch (Exception e) {
            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
-       }*/
-       if(!(nicknames.contains(body.get(0).getAuthor())))  return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
+       }
        Map<Integer,Boolean> parents= new HashMap<>();
        try (Connection connection = jdbcTemplate.getDataSource().getConnection()) {
            PreparedStatement preparedStatement = connection.prepareStatement(
@@ -106,13 +104,10 @@ public class PostController {
                aBody1.setForum(objThread.getForum());
                aBody1.setThread(objThread.getId());
                aBody1.setId(idPosts.getAndIncrement());
-               Object[] objects = new Object[]{
-                       aBody1.getAuthor(),
-                       aBody1.getParent(),
-               };
-               if (!(FU.contains(aBody1.getAuthor()))) {
+
+        /*       if (!(FU.contains(aBody1.getAuthor()))) {
                    FU.add(aBody1.getAuthor());
-               }
+               }*/
                preparedStatement.setInt(1, aBody1.getId());
                preparedStatement.setInt(2, aBody1.getParent());
                preparedStatement.setString(3, aBody1.getAuthor());
@@ -145,13 +140,13 @@ public class PostController {
        } catch (SQLException ignored) {}
        //jdbcTemplate.batchUpdate("insert into post (id,parent,author,message,isEdited,forum,thread,created,forTreeSort) "+
         //        " values (?,?,?,?,?,?,?,?::timestamptz,array_append((SELECT forTreeSort FROM Post WHERE id = ?), ?))", posts);
-        final String forumSlug=body.get(0).getForum();
+  //      final String forumSlug=body.get(0).getForum();
 
-        jdbcTemplate.batchUpdate("insert into ForumUser (\"user\",forum) values(?,?) ON CONFLICT DO NOTHING",
+    /*    jdbcTemplate.batchUpdate("insert into ForumUser (\"user\",forum) values(?,?) ON CONFLICT DO NOTHING",
                 FU.stream()
                         .distinct()
                         .map(user -> new Object[]{user,forumSlug})
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList()));*/
         final JSONArray result = new JSONArray();
         for (ObjPost aBody2 : body) {
             final StringBuilder created = new StringBuilder(aBody2.getCreated());

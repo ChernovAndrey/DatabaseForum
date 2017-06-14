@@ -118,3 +118,13 @@ CREATE TABLE IF NOT EXISTS forumUser (
 
 CREATE INDEX IF NOT EXISTS indexUserOnFU ON forumUser ("user");
 CREATE INDEX IF NOT EXISTS  indexForumONFU ON forumUser (forum);
+
+CREATE FUNCTION insertFU() RETURNS trigger AS $$
+    BEGIN
+    INSERT INTO forumuser("user",forum) values (NEW.author,NEW.forum) ON CONFLICT DO NOTHING;
+    return null;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER emp_stamp AFTER INSERT ON post
+    FOR EACH ROW EXECUTE PROCEDURE insertFU();

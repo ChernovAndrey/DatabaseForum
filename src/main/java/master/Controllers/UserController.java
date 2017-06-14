@@ -37,7 +37,6 @@ public class UserController {
         final List<ObjUser> users = jdbcTemplate.query("select * from users where LOWER(email)=lower(?) or LOWER(nickname)=lower(?)", new Object[]{body.getEmail(), body.getNickname()}, new userMapper());
         if (users.isEmpty()) {
             jdbcTemplate.update("insert into users (nickname,fullname,about,email) values (?,?,?,?)", body.getNickname(), body.getFullname(), body.getAbout(), body.getEmail());
-            postController.nicknames.add(nickname);
             return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
         }
         final JSONArray result = new JSONArray();
