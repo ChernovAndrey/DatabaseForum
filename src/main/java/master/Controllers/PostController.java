@@ -23,15 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -44,6 +38,8 @@ public class PostController {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     ForumController forumController;
+
+    HashSet<String> nicknames=new HashSet<>();
     AtomicInteger idPosts=new AtomicInteger(1);
     PostController(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -74,59 +70,81 @@ public class PostController {
         Integer countPosts = 0;
         final Timestamp now = new Timestamp(System.currentTimeMillis());
         StringBuilder DateCreated =new StringBuilder(now.toString());
-        try {
+       /* try {
            String Author = jdbcTemplate.queryForObject("select lower(nickname) from users where lower(nickname)=?", new Object[]{body.get(0).getAuthor().toLowerCase()}, String.class);
        } catch (Exception e) {
            return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
-       }
+       }*/
+       if(!(nicknames.contains(body.get(0).getAuthor())))  return new ResponseEntity<String>("", HttpStatus.NOT_FOUND);
        Map<Integer,Boolean> parents= new HashMap<>();
-       for (int i = 0; i < body.size(); i++) {
-            final ObjPost aBody1 = body.get(i);
+       try (Connection connection = jdbcTemplate.getDataSource().getConnection()) {
+           PreparedStatement preparedStatement = connection.prepareStatement(
+                   "insert into post (id,parent,author,message,isEdited,forum,thread,created,forTreeSort) "+
+                           " values (?,?,?,?,?,?,?,?::timestamptz,array_append((SELECT forTreeSort FROM Post WHERE id = ?), ?))", Statement.NO_GENERATED_KEYS);
 
-            if (body.get(i).getParent() != 0) {
-                Boolean flag = parents.get(body.get(i).getParent());
-                if (flag == null) {
-                    try {
-                        Integer parentPost = (Integer) jdbcTemplate.queryForObject("select id from post where id=? and thread=?", new Object[]{body.get(i).getParent(), idThread}, Integer.class);
-                        parents.put(body.get(i).getParent(),true);
-                        flag=true;
-                    } catch (Exception e) {
-                        parents.put(body.get(i).getParent(),false);
-                        return new ResponseEntity<String>("", HttpStatus.CONFLICT);
-                    }
-                }
-                if (flag==false) return new ResponseEntity<String>("", HttpStatus.CONFLICT);
+           for (int i = 0; i < body.size(); i++) {
+               final ObjPost aBody1 = body.get(i);
 
-            }
-            aBody1.setCreated(DateCreated.toString());
-            aBody1.setForum(objThread.getForum());
-            aBody1.setThread(objThread.getId());
-            aBody1.setId(idPosts.getAndIncrement());
-            Object[] objects=new Object[]{
-                    aBody1.getAuthor(),
-                    aBody1.getParent(),
-            };
-            if(!(FU.contains(aBody1.getAuthor()))) {
-                FU.add(aBody1.getAuthor());
-            }
-            posts.add(new Object[]{
-                        aBody1.getId(),
-                        aBody1.getParent(),
-                        aBody1.getAuthor(),
-                        aBody1.getMessage(),
-                        aBody1.getEdited(),
-                        aBody1.getForum(),
-                        aBody1.getThread(),
-                        aBody1.getCreated(),
-                        aBody1.getParent(),
-                        aBody1.getId()
-                });
-            countPosts++;
-        }
+               if (body.get(i).getParent() != 0) {
+                   Boolean flag = parents.get(body.get(i).getParent());
+                   if (flag == null) {
+                       try {
+                           final Integer thread = (Integer) jdbcTemplate.queryForObject("select thread from post where id=?", new Object[]{body.get(i).getParent()}, Integer.class);
+                           if (!Objects.equals(thread, idThread))
+                               return new ResponseEntity<String>("", HttpStatus.CONFLICT);
+                           parents.put(body.get(i).getParent(), true);
+                           flag = true;
+                       } catch (Exception e) {
+                           parents.put(body.get(i).getParent(), false);
+                           return new ResponseEntity<String>("", HttpStatus.CONFLICT);
+                       }
+                   }
+                   if (flag == false) return new ResponseEntity<String>("", HttpStatus.CONFLICT);
 
+               }
+               aBody1.setCreated(DateCreated.toString());
+               aBody1.setForum(objThread.getForum());
+               aBody1.setThread(objThread.getId());
+               aBody1.setId(idPosts.getAndIncrement());
+               Object[] objects = new Object[]{
+                       aBody1.getAuthor(),
+                       aBody1.getParent(),
+               };
+               if (!(FU.contains(aBody1.getAuthor()))) {
+                   FU.add(aBody1.getAuthor());
+               }
+               preparedStatement.setInt(1, aBody1.getId());
+               preparedStatement.setInt(2, aBody1.getParent());
+               preparedStatement.setString(3, aBody1.getAuthor());
+               preparedStatement.setString(4, aBody1.getMessage());
+               preparedStatement.setBoolean(5, aBody1.getEdited());
+               preparedStatement.setString(6, aBody1.getForum());
+               preparedStatement.setInt(7, aBody1.getThread());
+               preparedStatement.setString(8, aBody1.getCreated());
+               preparedStatement.setInt(9, aBody1.getParent());
+               preparedStatement.setInt(10, aBody1.getId());
+               preparedStatement.addBatch();
 
-        jdbcTemplate.batchUpdate("insert into post (id,parent,author,message,isEdited,forum,thread,created,forTreeSort) "+
-                " values (?,?,?,?,?,?,?,?::timestamptz,array_append((SELECT forTreeSort FROM Post WHERE id = ?), ?))", posts);
+           /*    posts.add(new Object[]{
+                       aBody1.getId(),
+                       aBody1.getParent(),
+                       aBody1.getAuthor(),
+                       aBody1.getMessage(),
+                       aBody1.getEdited(),
+                       aBody1.getForum(),
+                       aBody1.getThread(),
+                       aBody1.getCreated(),
+                       aBody1.getParent(),
+                       aBody1.getId()
+               });*/
+               countPosts++;
+           }
+           preparedStatement.executeBatch();
+           preparedStatement.close();
+
+       } catch (SQLException ignored) {}
+       //jdbcTemplate.batchUpdate("insert into post (id,parent,author,message,isEdited,forum,thread,created,forTreeSort) "+
+        //        " values (?,?,?,?,?,?,?,?::timestamptz,array_append((SELECT forTreeSort FROM Post WHERE id = ?), ?))", posts);
         final String forumSlug=body.get(0).getForum();
 
         jdbcTemplate.batchUpdate("insert into ForumUser (\"user\",forum) values(?,?) ON CONFLICT DO NOTHING",

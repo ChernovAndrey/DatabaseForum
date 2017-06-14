@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import javax.sql.DataSource;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -26,7 +27,8 @@ public class UserController {
     UserController(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-
+    @Autowired
+    PostController postController;
     @Autowired
     ForumController forumController;
 
@@ -35,6 +37,7 @@ public class UserController {
         final List<ObjUser> users = jdbcTemplate.query("select * from users where LOWER(email)=lower(?) or LOWER(nickname)=lower(?)", new Object[]{body.getEmail(), body.getNickname()}, new userMapper());
         if (users.isEmpty()) {
             jdbcTemplate.update("insert into users (nickname,fullname,about,email) values (?,?,?,?)", body.getNickname(), body.getFullname(), body.getAbout(), body.getEmail());
+            postController.nicknames.add(nickname);
             return new ResponseEntity<String>(body.getJson().toString(), HttpStatus.CREATED);
         }
         final JSONArray result = new JSONArray();
